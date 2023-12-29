@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3545CA272B3BAC1200054449 /* PinnedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3545CA262B3BAC1200054449 /* PinnedManager.swift */; };
+		3545CA292B3C444000054449 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3545CA282B3C444000054449 /* Info.plist */; };
 		35AD1F512B3AB0E1001E9F84 /* PinnedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AD1F502B3AB0E1001E9F84 /* PinnedView.swift */; };
 		35E84F272B2D80600027D805 /* ZFinderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35E84F262B2D80600027D805 /* ZFinderApp.swift */; };
 		35E84F292B2D80600027D805 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35E84F282B2D80600027D805 /* ContentView.swift */; };
@@ -39,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		3545CA262B3BAC1200054449 /* PinnedManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedManager.swift; sourceTree = "<group>"; };
+		3545CA282B3C444000054449 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ZFinder/Info.plist; sourceTree = "<group>"; };
 		35AD1F502B3AB0E1001E9F84 /* PinnedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedView.swift; sourceTree = "<group>"; };
 		35E84F232B2D80600027D805 /* ZFinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZFinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		35E84F262B2D80600027D805 /* ZFinderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZFinderApp.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 		35E84F1A2B2D80600027D805 = {
 			isa = PBXGroup;
 			children = (
+				3545CA282B3C444000054449 /* Info.plist */,
 				35E84F252B2D80600027D805 /* ZFinder */,
 				35E84F372B2D80620027D805 /* ZFinderTests */,
 				35E84F412B2D80620027D805 /* ZFinderUITests */,
@@ -247,6 +250,7 @@
 			files = (
 				35E84F2E2B2D80620027D805 /* Preview Assets.xcassets in Resources */,
 				35E84F2B2B2D80620027D805 /* Assets.xcassets in Resources */,
+				3545CA292B3C444000054449 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,6 +447,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ZFinder/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ZFinder/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -468,6 +473,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ZFinder/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ZFinder/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -17,8 +17,8 @@ struct ContentView: View {
 //        }
         PinnedView()
             .padding()
-        SearchView()
-            .padding()
+//        SearchView()
+//            .padding()
     }
 }
 
