@@ -43,35 +43,82 @@ struct PinnedView: View {
                 }
                 .buttonStyle(.borderless)
                 .padding(.trailing, 10)
-
+                
+                
             }
             .padding(.horizontal)
             .padding(.bottom, 5)
             
             Divider()
             
-            
-            if pinned.isEmpty || pinned.count * 30 < 300 {
-                List {
+            ScrollView {
+                VStack {
                     ForEach(pinned.sorted { $0.position < $1.position }) { folder in
                         pinnedFolderView(folder: folder)
                     }
+                    Spacer()
                 }
                 .scrollContentBackground(.hidden)
-                .frame(width: 400, height: CGFloat(pinned.count) * 30)
-                .padding(.vertical, -4)
-            } else {
-                ScrollView {
-                    LazyVStack {
-                        ForEach(pinned.sorted { $0.position < $1.position }) { folder in
-                            pinnedFolderView(folder: folder)
-                        }
-                    }
-                    .scrollContentBackground(.hidden)
-                    .frame(width: 400, height: 300)
-                }
-                .padding(.vertical, -4)
+//                .frame(maxWidth: 400, maxHeight: 300)
             }
+            .frame(maxWidth: 400, maxHeight: 300)
+            .fixedSize(horizontal: false, vertical: true)
+            
+//            GeometryReader { geometry in
+//                let maxHeight: CGFloat = 300
+//                
+//                if geometry.size.height < maxHeight {
+//                    VStack {
+//                        Text("< maxHeight: \(geometry.size.height)")
+//                        ForEach(pinned.sorted { $0.position < $1.position }) { folder in
+//                            pinnedFolderView(folder: folder)
+//                        }
+//                    }
+//                    .frame(maxHeight: geometry.size.height)
+//                } else {
+//                    ScrollView {
+//                        VStack {
+//                            Text(">= maxHeight: \(geometry.size.height)")
+//                            ForEach(pinned.sorted { $0.position < $1.position }) { folder in
+//                                pinnedFolderView(folder: folder)
+//                            }
+//                        }
+//                        .scrollContentBackground(.hidden)
+//                        .frame(width: 400, height: maxHeight)
+//                    }
+//                }
+//            }
+            
+            
+            
+            
+//            if pinned.isEmpty || pinned.count * 30 < 300 {
+//                List {
+//                    ForEach(pinned.sorted { $0.position < $1.position }) { folder in
+//                        pinnedFolderView(folder: folder)
+//                    }
+//                }
+//                .scrollContentBackground(.hidden)
+//                .frame(width: 400, height: CGFloat(pinned.count) * 30)
+//                .padding(.vertical, -4)
+//            } else {
+            
+            
+            
+//            ScrollView {
+//                VStack {
+//                    ForEach(pinned.sorted { $0.position < $1.position }) { folder in
+//                        pinnedFolderView(folder: folder)
+//                    }
+//                }
+//                .scrollContentBackground(.hidden)
+//                .frame(width: 400, height: 100)
+//            }
+//            .padding(.vertical, -4)
+//            
+            
+            
+//            }
             
 //            ScrollView {
 //                List(pinned.sorted { $0.position < $1.position }, id: \.self) { folder in
