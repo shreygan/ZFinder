@@ -104,7 +104,6 @@ class PinnedManager {
             
             pinned.remove(at: index)
             
-//            pinned[index...].forEach { $0.position -= 1 }
             for i in index..<pinned.count {
                 pinned[i].position -= 1
             }
