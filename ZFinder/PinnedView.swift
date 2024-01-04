@@ -11,6 +11,8 @@ struct PinnedView: View {
     @State private var pinned: [Pin]
     @State private var hoveredPin: Pin?
     @State private var showFolderPath = false
+    @State private var reordering = false
+    @State private var count = 0
     
     let pinnedManager = PinnedManager()
     
@@ -25,11 +27,22 @@ struct PinnedView: View {
                     .font(.title3)
                     .fontWeight(.heavy)
                     .padding()
-                    .contextMenu {
-                        Button("TEST1") {}
-                    }
                 
                 Spacer()
+                
+                Button(action: {
+                    reordering.toggle()
+                    withAnimation(.default) {
+                        count += 1
+                    }
+                }) {
+                    Image(systemName: "arrow.up.arrow.down")
+                        .font(.title3)
+                        .foregroundStyle(reordering ? .red : .blue)
+                }
+                .buttonStyle(.borderless)
+                .padding(.trailing, 2)
+                .help("Reorder Elements")
                 
                 Button(action: {
                     addPin()
@@ -46,40 +59,21 @@ struct PinnedView: View {
             
             Divider()
                 .padding(.horizontal, 10)
-            
-//            ScrollView {
-//                VStack {
-//                    ForEach(pinned.sorted { $0.position < $1.position }) { folder in
-//                        pinnedFolderView(folder)
-//                    }
-//                    Spacer()
-//                }
-//                .scrollContentBackground(.hidden)
-//            }
-//            .frame(maxWidth: 300, maxHeight: 200)
-//            .fixedSize(horizontal: false, vertical: true)
-            
+                    
             List {
                 ForEach(pinned) { pin in
                     pinnedFolderView(pin)
-                        .onHover { hovering in
-                            if hovering {
-                                print("HOVERING")
-                            }
-                        }
                 }
-//                .onMove(perform: orderPinned)
+                .if(reordering) { view in
+                    view.onMove(perform: orderPinned)
+                }
             }
             .scrollContentBackground(.hidden)
-            .frame(maxWidth: 300, maxHeight: 200)
-        
-            Divider()
-                .padding(.horizontal, 10)
         }
     }
     
     private func pinnedFolderView(_ pin: Pin) -> some View {
-        VStack(alignment: .leading, spacing: 0) {
+//        VStack(alignment: .leading, spacing: 0) {
             HStack {
                 Image(systemName: pin.file ? "doc" : "folder")
                     .resizable()
@@ -91,16 +85,19 @@ struct PinnedView: View {
                 Text(showFolderPath && pin == hoveredPin ? pin.path.path() : pin.name)
                     .font(.headline)
                     .lineLimit(1)
-                    .onHover(perform: { hovering in
-                        withAnimation(.easeInOut(duration: 0.1)) {
-                            showFolderPath = hovering
-                        }
-                    })
+                    .if(!reordering) { view in
+                        view.onHover(perform: { hovering in
+                            withAnimation(.easeInOut(duration: 0.1)) {
+                                showFolderPath = hovering
+                            }
+                        })
+                    }
+                
                     .truncationMode(.head)
                 
                 Spacer()
                 
-                if hoveredPin == pin {
+                if hoveredPin == pin && !reordering {
                     Button(action: {
                         deletePin(pin)
                     }) {
@@ -111,19 +108,29 @@ struct PinnedView: View {
                     .padding(.trailing, 10)
                 }
             }
+//        }
+        .if(reordering) { view in
+                view.modifier(Shake(animatableData: CGFloat(count)))
         }
         .padding(.vertical, 4)
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(pin == hoveredPin ? Color.gray.opacity(0.1) : Color.clear)
-        )
-        .onHover { hovering in
-            withAnimation(.easeInOut(duration: 0.1)) {
-                hoveredPin = hovering ? pin : nil
-            }
+        .padding(.horizontal, -10)
+        .if(!reordering) { view in
+                view.background (
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(pin == hoveredPin ? Color.gray.opacity(0.1) : Color.clear)
+                )
         }
-        .onTapGesture {
-            openFinder(pin)
+        .if(!reordering) { view in
+                view.onHover { hovering in
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        hoveredPin = hovering ? pin : nil
+                    }
+                }
+        }
+        .if(!reordering) { view in
+            view.onTapGesture {
+                openFinder(pin)
+            }
         }
         .listRowSeparator(.hidden)
     }
