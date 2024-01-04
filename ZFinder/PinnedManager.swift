@@ -10,6 +10,7 @@ import Foundation
 struct Pin: Hashable, Identifiable, Comparable, CustomStringConvertible {
     var id: UUID
     var position: Int
+    var file: Bool
     var path: URL
     
     var name: String {
@@ -17,12 +18,13 @@ struct Pin: Hashable, Identifiable, Comparable, CustomStringConvertible {
     }
     
     var description: String {
-        return "Pin(id: \(id), position: \(position), name: \(name)"
+        return "Pin(id: \(id), file: \(file), position: \(position), name: \(name)"
     }
     
-    init(position: Int, path: URL) {
+    init(position: Int, file: Bool, path: URL) {
         self.id = UUID()
         self.position = position
+        self.file = file
         self.path = path
     }
     
@@ -47,12 +49,13 @@ class PinnedManager {
             
             var pinnedFolders: [Pin] = lines.compactMap { line in
                 let components = line.components(separatedBy: ",")
-                guard components.count == 2,
+                guard components.count == 3,
                       let position = Int(components[0].trimmingCharacters(in: .whitespaces)),
-                      let path = URL(string: components[1].trimmingCharacters(in: .whitespaces)) else {
+                      let file = Bool(components[1].trimmingCharacters(in: .whitespaces)),
+                      let path = URL(string: components[2].trimmingCharacters(in: .whitespaces)) else {
                     return nil
                 }
-                return Pin(position: position, path: path)
+                return Pin(position: position, file: file, path: path)
             }
             pinnedFolders.sort { $0.position < $1.position }
             
@@ -67,7 +70,7 @@ class PinnedManager {
         print("SAVING PINNED")
         
         do {
-            let lines = folders.map { "\($0.position),\($0.path)" }
+            let lines = folders.map { "\($0.position),\($0.file),\($0.path)" }
             let content = lines.joined(separator: "\n")
             
             try content.write(to: fileURL, atomically: true, encoding: .utf8)
@@ -76,9 +79,21 @@ class PinnedManager {
         }
     }
     
-    func addPin(_ folder: String) {
+    func addPin(file: Bool, path: String) {
+        print("file: \(file), folder: \(path)'")
         do {
-            let pinnedData = "\(getPinned().count + 1),\(folder)\n"
+            let pinnedData: String
+            if let fileContent = try? String(contentsOf: fileURL, encoding: .utf8), !fileContent.isEmpty {
+                pinnedData = fileContent.last == "\n" ?
+                                "\(getPinned().count + 1),\(file),\(path)\n"
+                                : "\n\(getPinned().count + 1),\(file),\(path)\n"
+            } else {
+                pinnedData = "\(getPinned().count + 1),\(file),\(path)\n"
+            }
+            
+            
+
+//            let pinnedData = "\(getPinned().count + 1),\(file),\(path)\n"       // make count a locally stored var to not recall getPinned EVERY time
             
             let fileHandle = try FileHandle(forWritingTo: fileURL)
             fileHandle.seekToEndOfFile()

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3545CA272B3BAC1200054449 /* PinnedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3545CA262B3BAC1200054449 /* PinnedManager.swift */; };
 		3545CA292B3C444000054449 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3545CA282B3C444000054449 /* Info.plist */; };
+		355099BF2B4673A000D0CB79 /* WhenHovered.swift in Sources */ = {isa = PBXBuildFile; fileRef = 355099BE2B4673A000D0CB79 /* WhenHovered.swift */; };
 		35AD1F512B3AB0E1001E9F84 /* PinnedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AD1F502B3AB0E1001E9F84 /* PinnedView.swift */; };
 		35E84F272B2D80600027D805 /* ZFinderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35E84F262B2D80600027D805 /* ZFinderApp.swift */; };
 		35E84F292B2D80600027D805 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35E84F282B2D80600027D805 /* ContentView.swift */; };
@@ -41,6 +42,7 @@
 /* Begin PBXFileReference section */
 		3545CA262B3BAC1200054449 /* PinnedManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedManager.swift; sourceTree = "<group>"; };
 		3545CA282B3C444000054449 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ZFinder/Info.plist; sourceTree = "<group>"; };
+		355099BE2B4673A000D0CB79 /* WhenHovered.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhenHovered.swift; sourceTree = "<group>"; };
 		35AD1F502B3AB0E1001E9F84 /* PinnedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedView.swift; sourceTree = "<group>"; };
 		35E84F232B2D80600027D805 /* ZFinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZFinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		35E84F262B2D80600027D805 /* ZFinderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZFinderApp.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				35E84F2F2B2D80620027D805 /* ZFinder.entitlements */,
 				35E84F2C2B2D80620027D805 /* Preview Content */,
 				35AD1F502B3AB0E1001E9F84 /* PinnedView.swift */,
+				355099BE2B4673A000D0CB79 /* WhenHovered.swift */,
 				3545CA262B3BAC1200054449 /* PinnedManager.swift */,
 			);
 			path = ZFinder;
@@ -280,6 +283,7 @@
 				35E84F542B2D80C40027D805 /* ApplicationMenu.swift in Sources */,
 				35E84F522B2D809A0027D805 /* SearchView.swift in Sources */,
 				35AD1F512B3AB0E1001E9F84 /* PinnedView.swift in Sources */,
+				355099BF2B4673A000D0CB79 /* WhenHovered.swift in Sources */,
 				35E84F272B2D80600027D805 /* ZFinderApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -16,6 +16,8 @@ struct ContentView: View {
 //            Text("Hello, world!!")
 //        }
         PinnedView()
+        
+        Spacer()
 //            .padding()
 //        SearchView()
 //            .padding()

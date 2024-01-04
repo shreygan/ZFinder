@@ -25,7 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         AppDelegate.instance = self
-        statusBarItem.button?.image = NSImage(systemSymbolName: "testtube.2", accessibilityDescription: "logo")
+        statusBarItem.button?.image = NSImage(systemSymbolName: "folder.fill", accessibilityDescription: "logo")
         statusBarItem.menu = menu.createMenu()
     }
 }

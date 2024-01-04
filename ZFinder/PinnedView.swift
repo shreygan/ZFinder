@@ -25,6 +25,9 @@ struct PinnedView: View {
                     .font(.title3)
                     .fontWeight(.heavy)
                     .padding()
+                    .contextMenu {
+                        Button("TEST1") {}
+                    }
                 
                 Spacer()
                 
@@ -32,44 +35,60 @@ struct PinnedView: View {
                     addPin()
                 }) {
                     Image(systemName: "plus.circle")
-                        .font(.title)
+                        .font(.title3)
                         .foregroundStyle(.blue)
                 }
                 .buttonStyle(.borderless)
-                .padding(.trailing, 10)
+                .padding(.trailing, 15)
             }
-            .padding(.horizontal)
-            .padding(.bottom, 5)
+            .padding(.top, -7)
+            .padding(.bottom, -13)
             
             Divider()
+                .padding(.horizontal, 10)
             
-            ScrollView {
-                VStack {
-                    ForEach(pinned.sorted { $0.position < $1.position }) { folder in
-                        pinnedFolderView(folder: folder)
-                    }
-                    Spacer()
+//            ScrollView {
+//                VStack {
+//                    ForEach(pinned.sorted { $0.position < $1.position }) { folder in
+//                        pinnedFolderView(folder)
+//                    }
+//                    Spacer()
+//                }
+//                .scrollContentBackground(.hidden)
+//            }
+//            .frame(maxWidth: 300, maxHeight: 200)
+//            .fixedSize(horizontal: false, vertical: true)
+            
+            List {
+                ForEach(pinned) { pin in
+                    pinnedFolderView(pin)
+                        .onHover { hovering in
+                            if hovering {
+                                print("HOVERING")
+                            }
+                        }
                 }
-                .scrollContentBackground(.hidden)
+//                .onMove(perform: orderPinned)
             }
-            .frame(maxWidth: 400, maxHeight: 300)
-            .fixedSize(horizontal: false, vertical: true)
+            .scrollContentBackground(.hidden)
+            .frame(maxWidth: 300, maxHeight: 200)
         
             Divider()
+                .padding(.horizontal, 10)
         }
     }
     
-    private func pinnedFolderView(folder: Pin) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
+    private func pinnedFolderView(_ pin: Pin) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Image(systemName: "folder")
+                Image(systemName: pin.file ? "doc" : "folder")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 20, height: 20)
-                    .foregroundColor(.blue)
+                    .foregroundColor(pin.file ? .gray : .blue)
                     .padding(.leading, 10)
                 
-                Text(showFolderPath && folder == hoveredPin ? folder.path.path() : folder.name)
+                Text(showFolderPath && pin == hoveredPin ? pin.path.path() : pin.name)
                     .font(.headline)
                     .lineLimit(1)
                     .onHover(perform: { hovering in
@@ -77,12 +96,13 @@ struct PinnedView: View {
                             showFolderPath = hovering
                         }
                     })
+                    .truncationMode(.head)
                 
                 Spacer()
                 
-                if hoveredPin == folder {
+                if hoveredPin == pin {
                     Button(action: {
-                        deletePin(folder)
+                        deletePin(pin)
                     }) {
                         Image(systemName: "trash")
                             .foregroundStyle(.red)
@@ -95,15 +115,15 @@ struct PinnedView: View {
         .padding(.vertical, 4)
         .background(
             RoundedRectangle(cornerRadius: 8)
-                .fill(folder == hoveredPin ? Color.gray.opacity(0.1) : Color.clear)
+                .fill(pin == hoveredPin ? Color.gray.opacity(0.1) : Color.clear)
         )
         .onHover { hovering in
             withAnimation(.easeInOut(duration: 0.1)) {
-                hoveredPin = hovering ? folder : nil
+                hoveredPin = hovering ? pin : nil
             }
         }
         .onTapGesture {
-            openFinder(folder)
+            openFinder(pin)
         }
         .listRowSeparator(.hidden)
     }
@@ -122,7 +142,7 @@ struct PinnedView: View {
     
     private func addPin() {
         let dirPicker = NSOpenPanel()
-        dirPicker.canChooseFiles = false
+        dirPicker.canChooseFiles = true
         dirPicker.canChooseDirectories = true
         dirPicker.allowsMultipleSelection = false
         dirPicker.canDownloadUbiquitousContents = true
@@ -130,18 +150,29 @@ struct PinnedView: View {
         
         dirPicker.level = .floating
         dirPicker.orderFrontRegardless()
+        dirPicker.center()
         
         if dirPicker.runModal() == .OK {
             if let path = dirPicker.url?.path() {
-                pinnedManager.addPin(path)
+                pinnedManager.addPin(file: path.last! != "/", path: path)
             }
         }
         
         pinned = pinnedManager.getPinned()
     }
+    
+    private func orderPinned(source: IndexSet, dest: Int) {
+        pinned.move(fromOffsets: source, toOffset: dest)
+        
+        pinned.enumerated().forEach { idx, pin in
+            pinned[idx].position = idx + 1
+        }
+        
+        pinnedManager.savePinned(pinned)
+    }
 }
 
 
-#Preview {
-    PinnedView()
-}
+//#Preview {
+//    PinnedView()
+//}
