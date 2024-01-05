@@ -15,7 +15,7 @@ struct ContentView: View {
 //                .foregroundStyle(.tint)
 //            Text("Hello, world!!")
 //        }
-        PinnedView()
+        MainView()
         
         Spacer()
 //            .padding()

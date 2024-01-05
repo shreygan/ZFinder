@@ -21,6 +21,10 @@ struct Pin: Hashable, Identifiable, Comparable, CustomStringConvertible {
         return "Pin(id: \(id), file: \(file), position: \(position), name: \(name)"
     }
     
+    var fileType: String {
+        path.pathExtension
+    }
+    
     init(position: Int, file: Bool, path: URL) {
         self.id = UUID()
         self.position = position
