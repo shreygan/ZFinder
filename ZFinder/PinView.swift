@@ -94,7 +94,7 @@ struct PinView: View {
                 .padding(.horizontal, 10)
             
             HStack {
-                TextField("Search", text: $search)
+                TextField("Search \(searchPath ? "Path" : "Name")", text: $search)
                     .padding(.horizontal, 20)
                     .textFieldStyle(PlainTextFieldStyle())
                     .font(.system(size: 10))
@@ -102,12 +102,15 @@ struct PinView: View {
                     .foregroundStyle(Color.gray)
                 
                 Toggle(isOn: $searchPath) {
-                    Text("Path")
+                    Text(searchPath ? "Path" : "Name")
                         .font(.system(size: 10))
+                        .padding(.horizontal, -2)
+                        .frame(width: 25)
                 }
-                .toggleStyle(CheckboxToggleStyle())
+                .toggleStyle(ButtonToggleStyle())
                 .padding(.leading, -17.5)
-                .padding(.trailing, 20)
+                .padding(.trailing, 12.5)
+
             }
             
             Divider()
