@@ -8,12 +8,11 @@
 import Foundation
 import SwiftUI
 
-
 class ApplicationMenu: NSObject {
     let menu = NSMenu()
     
     func createMenu() -> NSMenu {
-        let contView = ContentView()
+        let contView = MainView()
         let topView = NSHostingController(rootView: contView)
         topView.view.frame.size = CGSize(width: 300, height: 300)
         
@@ -22,22 +21,24 @@ class ApplicationMenu: NSObject {
         menu.addItem(customMenuItem)
         menu.addItem(NSMenuItem.separator())
         
-//        let buttonShortcutItem = NSMenuItem(title: "Button Shortcut", action: nil, keyEquivalent: "B")
-//        buttonShortcutItem.target = nil
-//        buttonShortcutItem.action = #selector(ContentViewModel.buttonAction)
-//        menu.addItem(buttonShortcutItem)
+//        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+//            print("MONITORING: \(event)")
+//            if let characters = event.charactersIgnoringModifiers {
+//                print("Pressed key: \(characters)")
+//            }
+//            return event
+//        }
+        
+//        let test = NSMenuItem(title: "test", action: #selector(printTest), keyEquivalent: "w")
+//        test.target = self
+//        menu.addItem(test)
+        
+        menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         
         return menu
-        
-//        let cpView = ColorPickerView()
-//        let t2View = NSHostingController(rootView: cpView)
-//        t2View.view.frame.size = CGSize(width: 300, height: 300)
-//
-//        let cmi = NSMenuItem()
-//        cmi.view = t2View.view
-//        menu.addItem(cmi)
-//        menu.addItem(NSMenuItem.separator())
-//        
-//        return menu
+    }
+    
+    @objc func printTest() {
+        print("Test")
     }
 }

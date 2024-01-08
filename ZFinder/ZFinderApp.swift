@@ -12,32 +12,6 @@ struct ZFinderApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
-//        WindowGroup {
-//            ContentView()
-//        }
-//        .commands {
-////            CommandGroup(after: .appInfo) {
-////                Button(action: {
-////                    print("OMG BUTTON")
-////                    
-////                }) {
-////                    Text("HELLO")
-////                }
-////            }
-//            CommandMenu("Menu") {
-//                Button(action: {
-//                    print("ACTION 1")
-//                }) {
-//                    Text("Action")
-//                }
-//                Button(action: {
-//                    print("ACTION 2")
-//                }) {
-//                    Text("Another action")
-//                }
-//            }
-//        }
-    
         Settings {
             EmptyView()
         }

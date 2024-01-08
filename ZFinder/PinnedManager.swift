@@ -15,10 +15,6 @@ struct Pin: Hashable, Identifiable, Comparable, CustomStringConvertible {
     var color: CustomColor
     var path: URL
     
-//    var name: String {
-//        return path.lastPathComponent
-//    }
-    
     var description: String {
         return "Pin(id: \(id), position: \(position), name: \(name), file: \(file), color: \(color), path: \(path)\n"
     }
@@ -65,8 +61,6 @@ class PinnedManager {
                     let color = CustomColor.createCustomColor(components[3].trimmingCharacters(in: .whitespaces))
                     let path = URL(string: components[4].trimmingCharacters(in: .whitespaces))
                     
-//                    print(components)
-                    
                     return Pin(position: position!, name: name, file: file!, color: color!, path: path!)
                 } else {
                     return nil
@@ -93,8 +87,6 @@ class PinnedManager {
     }
     
     func savePinned(_ pins: [Pin]) {
-        print("SAVING PINNED")
-        
         do {
             let lines = pins.map { "\($0.position),\($0.name),\($0.file),\($0.color.name),\($0.path.path(percentEncoded: false))" }
             let content = lines.joined(separator: "\n")
@@ -106,7 +98,6 @@ class PinnedManager {
     }
     
     func addPin(file: Bool, path: String) {
-//        print("file: \(file), folder: \(path)'")
         let url = URL(string: path)!
         do {
             let pinnedData: String
@@ -119,8 +110,6 @@ class PinnedManager {
                 pinnedData = "\(getPinned().count + 1),\(url.lastPathComponent),\(file),\(CustomColor.gray.name),\(path)\n"
             }
             
-            
-
 //            let pinnedData = "\(getPinned().count + 1),\(file),\(path)\n"       // make count a locally stored var to not recall getPinned EVERY time
             
             let fileHandle = try FileHandle(forWritingTo: fileURL)
@@ -136,15 +125,7 @@ class PinnedManager {
     func deletePin(_ pin: Pin) {
         var pinned = getPinned()
         
-        print("DELETING \(pin.position) AT INDEX: \(String(describing: pinned.firstIndex(where: { $0.position == pin.position })))")
-        
         if let index = pinned.firstIndex(where: { $0.position == pin.position }) {
-//            print(pinned)
-//            print("")
-//            print("")
-//            print("")
-//            print("INDEX IS \(index)")
-            
             pinned.remove(at: index)
             
             for i in index..<pinned.count {
@@ -154,10 +135,6 @@ class PinnedManager {
             savePinned(pinned)
         }
     }
-    
-//    func setPinColor(_ pin: Pin, color: CustomColor) {
-//        
-//    }
     
     private func createFile() {
         if !FileManager.default.fileExists(atPath: fileURL.path) {

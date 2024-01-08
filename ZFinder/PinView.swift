@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import HotKey
 
 struct PinView: View {
     @State private var pinned: [Pin]
@@ -35,12 +36,25 @@ struct PinView: View {
     }
     
     let pinnedManager = PinnedManager()
+    let hotkey = HotKey(key: .a, modifiers: [.command, .control])
     
     init(selectedPin: Binding<Pin?>, openFinder: @escaping (String) -> Void) {
         _pinned = State(initialValue: pinnedManager.getPinned())
         _selectedPin = selectedPin
         self.openFinder = openFinder
+        
+//        callFunc()
     }
+    
+//    private func callFunc() {
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "h:mm:ss.SSS a"
+//        
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+//            print("CALLING AT \(dateFormatter.string(from: Date()))")
+//            callFunc()
+//        }
+//    }
     
     var body: some View {
         VStack {
@@ -53,10 +67,7 @@ struct PinView: View {
                 Spacer()
                 
                 Button(action: {
-                    reordering.toggle()
-                    withAnimation(.default) {
-                        count += 1
-                    }
+                    reorderPins()
                 }) {
                     Image(systemName: "arrow.up.arrow.down")
                         .font(hoveringOrder ? .title2 : .title3)
@@ -70,6 +81,28 @@ struct PinView: View {
                         hoveringOrder = hovering
                     }
                 }
+//                .popover(isPresented: $reordering) {
+//                    Text("POPOVER!")
+//                        .padding(5)
+//                    
+//                    Spacer()
+//                    
+//                    Button("Option 1") {
+//                        print("Selected Option 1")
+//                    }
+//                    .popover(isPresented: $reordering) {
+//                        Text("DOUBLE POPOVER!")
+//                    }
+//                    .padding(5)
+//                    Button("Option 2") {
+//                        print("Selected Option 2")
+//                    }
+//                    .padding(5)
+//                    Button("Option 3") {
+//                        print("Selected Option 3")
+//                    }
+//                    .padding(5)
+//                }
                 
                 Button(action: {
                     addPin()
@@ -94,7 +127,7 @@ struct PinView: View {
                 .padding(.horizontal, 10)
             
             HStack {
-                TextField("Search \(searchPath ? "Path" : "Name")", text: $search)
+                TextField("Search by \(searchPath ? "Path" : "Name")", text: $search)
                     .padding(.horizontal, 20)
                     .textFieldStyle(PlainTextFieldStyle())
                     .font(.system(size: 10))
@@ -127,6 +160,8 @@ struct PinView: View {
             }
             .scrollContentBackground(.hidden)
             .listStyle(PlainListStyle())
+            .padding(.bottom, -5)
+            .padding(.top, -2)
         }
     }
     
@@ -159,7 +194,6 @@ struct PinView: View {
                         }
                     }
                 }
-                
                 
             Text(showFolderPath && pin == hoveredPin ? pin.path.path(percentEncoded: false) : pin.name)
                 .font(.headline)
@@ -212,7 +246,6 @@ struct PinView: View {
             view.background (
                 RoundedRectangle(cornerRadius: 8)
                     .fill(pin == hoveredPin ? pin.color.color.opacity(0.4) : pin.color.color.opacity(0.2))
-//                    .fill(pin == hoveredPin ? Color.red.opacity(0.2) : Color.clear)
                     .padding(.horizontal, -5)
             )
         }
@@ -250,25 +283,27 @@ struct PinView: View {
         
         if dirPicker.runModal() == .OK {
             if let path = dirPicker.url?.path(percentEncoded: false) {
-//                print("PATHTHJTHJKNDTHKGJNDKJHDGKJKJDNF       \(path.removingPercentEncoding!)")
                 pinnedManager.addPin(file: path.last! != "/", path: path)
             }
         }
-        
         pinned = pinnedManager.getPinned()
     }
     
     private func orderPinned(source: IndexSet, dest: Int) {
         pinned.move(fromOffsets: source, toOffset: dest)
-        
         pinned.enumerated().forEach { idx, pin in
             pinned[idx].position = idx + 1
         }
-        
         pinnedManager.savePinned(pinned)
     }
+    
+    private func reorderPins() {
+        reordering.toggle()
+        withAnimation(.default) {
+            count += 1
+        }
+    }
 }
-
 
 //#Preview {
 //    PinView()

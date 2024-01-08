@@ -56,6 +56,9 @@ struct DetailView: View {
                     hoveringBack = hovering
                 }
             }
+            .onDisappear {
+                resetSelectedPin()
+            }
             
             if let pin = pin {
                 Image(systemName: pin.file ? extToSFSymbol(ext: pin.fileType) : "folder")
@@ -88,7 +91,6 @@ struct DetailView: View {
                         editing.toggle()
                         editedText = pin?.name ?? ""
                         editingFocused.toggle()
-//                        print("EDITED TOGGLE: \(editedText)")
                     }) {
                         Image(systemName: "pencil")
                             .font(hoveringEditButton ? .title2 : .title3)
@@ -133,9 +135,6 @@ struct DetailView: View {
                     }
                 }
                 .padding(.trailing, 5)
-//                .onTapGesture {
-//                    editing.toggle()
-//                }
             }
             .onHover { hovering in
                 if hovering {
@@ -172,8 +171,6 @@ struct DetailView: View {
         .padding(.bottom, 0.25)
         .frame(maxHeight: 31)
 
-        
-        
         Divider()
             .padding(.horizontal, 10)
         
@@ -222,8 +219,6 @@ struct DetailView: View {
         }
         .padding(10)
         .padding(.trailing, 5)
-//        .padding(.horizontal, 5)
-                
         
         Divider()
             .padding(.horizontal, 10)
@@ -246,13 +241,16 @@ struct DetailView: View {
                 }) {
                     RoundedRectangle(cornerRadius: 8)
                         .fill(color.color)
-                        .frame(width: hoveredColor == color ? 23.5 : 18.25, height: hoveredColor == color ? 23.5 : 18.25)
+                        .frame(width: (hoveredColor == color && pin?.color == color) ? 23.5 : (hoveredColor == color || pin?.color == color) ? 22.5 : 18.25,
+                               height: (hoveredColor == color && pin?.color == color) ? 23.5 : (hoveredColor == color || pin?.color == color) ? 22.5 : 18.25)
                 }
                 .buttonStyle(.borderless)
                 .onHover { hovering in
                     hoveredColor = hovering ? color : nil
                 }
-                .frame(width: 18.25, height: 18.25)
+                .frame(width: 23.5, height: 23.5)
+                .padding(.vertical, -3.5)
+                .padding(.horizontal, -3)
             }
         }
         .padding(.horizontal, 10)
@@ -290,7 +288,6 @@ struct DetailView: View {
     private func setPinColor(_ color: CustomColor) {
         if let index = pinned.firstIndex(where: { $0.position == pin?.position }) {
             pinned[index].color = color
-//            print(pinned)
             pin = pinned[index]
             pinnedManager.savePinned(pinned)
         } else {

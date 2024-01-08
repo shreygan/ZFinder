@@ -15,6 +15,7 @@
 		358FBB982B46BCFD00041BAA /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 358FBB972B46BCFD00041BAA /* MainView.swift */; };
 		358FBB9A2B48012900041BAA /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 358FBB992B48012900041BAA /* ColorPickerView.swift */; };
 		35AD1F512B3AB0E1001E9F84 /* PinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AD1F502B3AB0E1001E9F84 /* PinView.swift */; };
+		35E384462B4A8B77000B6561 /* HotKey in Frameworks */ = {isa = PBXBuildFile; productRef = 35E384452B4A8B77000B6561 /* HotKey */; };
 		35E84F272B2D80600027D805 /* ZFinderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35E84F262B2D80600027D805 /* ZFinderApp.swift */; };
 		35E84F292B2D80600027D805 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35E84F282B2D80600027D805 /* ContentView.swift */; };
 		35E84F2B2B2D80620027D805 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35E84F2A2B2D80620027D805 /* Assets.xcassets */; };
@@ -72,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35E384462B4A8B77000B6561 /* HotKey in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,6 +177,9 @@
 			dependencies = (
 			);
 			name = ZFinder;
+			packageProductDependencies = (
+				35E384452B4A8B77000B6561 /* HotKey */,
+			);
 			productName = ZFinder;
 			productReference = 35E84F232B2D80600027D805 /* ZFinder.app */;
 			productType = "com.apple.product-type.application";
@@ -247,6 +252,9 @@
 				Base,
 			);
 			mainGroup = 35E84F1A2B2D80600027D805;
+			packageReferences = (
+				35E384442B4A8B77000B6561 /* XCRemoteSwiftPackageReference "HotKey" */,
+			);
 			productRefGroup = 35E84F242B2D80600027D805 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -461,10 +469,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = ZFinder/ZFinder.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ZFinder/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ZFinder/Info.plist;
@@ -473,7 +483,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = .3.1;
+				MARKETING_VERSION = 0.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ZFinder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -487,10 +497,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = ZFinder/ZFinder.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ZFinder/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ZFinder/Info.plist;
@@ -499,7 +511,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = .3.1;
+				MARKETING_VERSION = 0.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ZFinder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -615,6 +627,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		35E384442B4A8B77000B6561 /* XCRemoteSwiftPackageReference "HotKey" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/soffes/HotKey";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		35E384452B4A8B77000B6561 /* HotKey */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 35E384442B4A8B77000B6561 /* XCRemoteSwiftPackageReference "HotKey" */;
+			productName = HotKey;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 35E84F1B2B2D80600027D805 /* Project object */;
 }

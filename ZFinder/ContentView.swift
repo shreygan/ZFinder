@@ -7,15 +7,7 @@
 
 import SwiftUI
 
-class ContentViewModel: NSObject {
-    @objc func buttonAction() {
-        print("Button action triggered by shortcut!")
-    }
-}
-
 struct ContentView: View {
-    @State private var viewModel = ContentViewModel()
-    
     var body: some View {
         MainView()
         

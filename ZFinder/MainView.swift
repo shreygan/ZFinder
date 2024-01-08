@@ -16,6 +16,8 @@ struct MainView: View {
         } else {
             PinView(selectedPin: $selectedPin, openFinder: openFinder)
         }
+        
+        Spacer()
     }
     
     func openFinder(_ path: String) {
