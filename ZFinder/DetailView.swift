@@ -7,6 +7,7 @@
 
 import SwiftUI
 import QuickLook
+import KeyboardShortcuts
 
 struct DetailView: View {
     @State private var hoveredComp: Int?
@@ -19,6 +20,7 @@ struct DetailView: View {
     @State private var hoveringEditButton = false
     @State private var editing = false
     @State private var editedText = ""
+    @State private var customShortcut: KeyboardShortcuts.Shortcut?
     
     @State private var pinned: [Pin]
     @State var url: URL?
@@ -137,13 +139,13 @@ struct DetailView: View {
                 .padding(.trailing, 5)
             }
             .onHover { hovering in
-                if hovering {
+                if hovering || editing {
                     withAnimation(.easeInOut(duration: 0.3).delay(1)) {
-                        showEditButton = hovering
+                        showEditButton = true
                     }
                 } else {
                     withAnimation(.easeInOut(duration: 0.3)) {
-                        showEditButton = hovering
+                        showEditButton = false
                     }
                 }
             }
@@ -255,6 +257,15 @@ struct DetailView: View {
         }
         .padding(.horizontal, 10)
         .padding(.bottom, 5)
+        
+        Divider()
+        
+        Form {
+            KeyboardShortcuts.Recorder("test:", name: .test)
+        }
+        .onAppear {
+            customShortcut = KeyboardShortcuts.getShortcut(for: .test)
+        }
         
         Divider()
             .padding(.horizontal, 10)

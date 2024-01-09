@@ -43,6 +43,9 @@ struct PinView: View {
         _selectedPin = selectedPin
         self.openFinder = openFinder
         
+//        let fileManager = FileManager()
+//        print(fileManager.currentDirectoryPath)
+        
 //        callFunc()
     }
     
@@ -160,8 +163,11 @@ struct PinView: View {
             }
             .scrollContentBackground(.hidden)
             .listStyle(PlainListStyle())
-            .padding(.bottom, -5)
+            .padding(.bottom, -7)
             .padding(.top, -2)
+        }
+        .onAppear {
+            pinned = pinnedManager.getPinned()
         }
     }
     

@@ -8,6 +8,7 @@
 import SwiftUI
 import Carbon
 import Cocoa
+import KeyboardShortcuts
 
 extension View {
     /// Applies the given transform if the given condition evaluates to `true`.
@@ -308,4 +309,11 @@ class HotkeySolution {
                                      &hotKeyRef)
     assert(status == noErr)
   }
+}
+
+
+/// User Customizable Keyboard Shortcuts
+
+extension KeyboardShortcuts.Name {
+    static let test = Self("test")
 }

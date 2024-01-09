@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		353FFB6C2B4D486B00516708 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 353FFB6B2B4D486B00516708 /* KeyboardShortcuts */; };
 		3545CA272B3BAC1200054449 /* PinnedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3545CA262B3BAC1200054449 /* PinnedManager.swift */; };
 		3545CA292B3C444000054449 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3545CA282B3C444000054449 /* Info.plist */; };
 		355099BF2B4673A000D0CB79 /* WhenHovered.swift in Sources */ = {isa = PBXBuildFile; fileRef = 355099BE2B4673A000D0CB79 /* WhenHovered.swift */; };
@@ -74,6 +75,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				35E384462B4A8B77000B6561 /* HotKey in Frameworks */,
+				353FFB6C2B4D486B00516708 /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,6 +181,7 @@
 			name = ZFinder;
 			packageProductDependencies = (
 				35E384452B4A8B77000B6561 /* HotKey */,
+				353FFB6B2B4D486B00516708 /* KeyboardShortcuts */,
 			);
 			productName = ZFinder;
 			productReference = 35E84F232B2D80600027D805 /* ZFinder.app */;
@@ -254,6 +257,7 @@
 			mainGroup = 35E84F1A2B2D80600027D805;
 			packageReferences = (
 				35E384442B4A8B77000B6561 /* XCRemoteSwiftPackageReference "HotKey" */,
+				353FFB6A2B4D486B00516708 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 			);
 			productRefGroup = 35E84F242B2D80600027D805 /* Products */;
 			projectDirPath = "";
@@ -483,7 +487,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.3.1;
+				MARKETING_VERSION = 0.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ZFinder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -511,7 +515,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.3.1;
+				MARKETING_VERSION = 0.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ZFinder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -629,6 +633,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		353FFB6A2B4D486B00516708 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.16.1;
+			};
+		};
 		35E384442B4A8B77000B6561 /* XCRemoteSwiftPackageReference "HotKey" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/soffes/HotKey";
@@ -640,6 +652,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		353FFB6B2B4D486B00516708 /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 353FFB6A2B4D486B00516708 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
+		};
 		35E384452B4A8B77000B6561 /* HotKey */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 35E384442B4A8B77000B6561 /* XCRemoteSwiftPackageReference "HotKey" */;

@@ -38,10 +38,11 @@ struct Pin: Hashable, Identifiable, Comparable, CustomStringConvertible {
 }
 
 class PinnedManager {
+    private let fileManager: FileManager = FileManager.default
     private let fileURL: URL
     
     init() {
-        fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(".zfinderfavorites")
+        fileURL = fileManager.homeDirectoryForCurrentUser.appendingPathComponent(".zfinderpins")
     
         createFile()
     }
@@ -61,7 +62,16 @@ class PinnedManager {
                     let color = CustomColor.createCustomColor(components[3].trimmingCharacters(in: .whitespaces))
                     let path = URL(string: components[4].trimmingCharacters(in: .whitespaces))
                     
-                    return Pin(position: position!, name: name, file: file!, color: color!, path: path!)
+//                    print("path: \(path!.path())")
+//                    print("default: \(fileManager.currentDirectoryPath)")
+//                    print("exists: \(fileManager.fileExists(atPath: path!.path(percentEncoded: false)))")
+                    
+                    
+                    if fileManager.fileExists(atPath: path!.path(percentEncoded: false)) {
+                        return Pin(position: position!, name: name, file: file!, color: color!, path: path!)
+                    } else {
+                        return nil
+                    }
                 } else {
                     return nil
                 }
@@ -137,8 +147,8 @@ class PinnedManager {
     }
     
     private func createFile() {
-        if !FileManager.default.fileExists(atPath: fileURL.path) {
-            FileManager.default.createFile(atPath: fileURL.path, contents: nil, attributes: nil)
+        if !fileManager.fileExists(atPath: fileURL.path) {
+            fileManager.createFile(atPath: fileURL.path, contents: nil, attributes: nil)
 //            print("CREATING FILE at \(fileURL.path)")
         } else {
 //            print("FILE ALREADY CREATED AT \(fileURL.path)")
