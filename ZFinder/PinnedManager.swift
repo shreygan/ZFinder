@@ -37,14 +37,27 @@ struct Pin: Hashable, Identifiable, Comparable, CustomStringConvertible {
     }
 }
 
+
 class PinnedManager {
     private let fileManager: FileManager = FileManager.default
     private let fileURL: URL
     
+    var pinned: [Pin] {
+        return self.getPinned()
+    }
+    
     init() {
         fileURL = fileManager.homeDirectoryForCurrentUser.appendingPathComponent(".zfinderpins")
-    
         createFile()
+    }
+    
+    private func createFile() {
+        if !fileManager.fileExists(atPath: fileURL.path) {
+            fileManager.createFile(atPath: fileURL.path, contents: nil, attributes: nil)
+            //            print("CREATING FILE at \(fileURL.path)")
+        } else {
+            //            print("FILE ALREADY CREATED AT \(fileURL.path)")
+        }
     }
     
     func getPinned() -> [Pin] {
@@ -146,12 +159,17 @@ class PinnedManager {
         }
     }
     
-    private func createFile() {
-        if !fileManager.fileExists(atPath: fileURL.path) {
-            fileManager.createFile(atPath: fileURL.path, contents: nil, attributes: nil)
-//            print("CREATING FILE at \(fileURL.path)")
-        } else {
-//            print("FILE ALREADY CREATED AT \(fileURL.path)")
+    func getPinByPos(_ pos: Int?) -> Pin? {
+        if pos == nil {
+            return nil
         }
+        
+        for pin in pinned {
+            if pin.position == pos {
+                return pin
+            }
+        }
+        
+        return nil
     }
 }

@@ -20,7 +20,9 @@ struct DetailView: View {
     @State private var hoveringEditButton = false
     @State private var editing = false
     @State private var editedText = ""
-    @State private var customShortcut: KeyboardShortcuts.Shortcut?
+//    @State private var customShortcut: KeyboardShortcuts.Shortcut?
+    @State private var shortcutWindowOpen = false
+    @State private var shortcutWindowInput = ""
     
     @State private var pinned: [Pin]
     @State var url: URL?
@@ -28,6 +30,8 @@ struct DetailView: View {
     @Binding var pin: Pin?
     
     @FocusState private var editingFocused: Bool
+    
+    @Environment(\.openWindow) var openWindow
     
     var resetSelectedPin: () -> Void
     var openFinder: (String) -> Void
@@ -260,12 +264,32 @@ struct DetailView: View {
         
         Divider()
         
-        Form {
-            KeyboardShortcuts.Recorder("test:", name: .test)
+//        Form {
+//            KeyboardShortcuts.Recorder("test:", name: .test)
+//        }
+//        .onAppear {
+//            customShortcut = KeyboardShortcuts.getShortcut(for: .test)
+//        }
+        
+        HStack {
+            Spacer()
+            
+            Button(action: {
+//                shortcutWindowOpen.toggle()
+//                openWindow(id: "shortcutInput")
+//                openWindow(value: pin?.id)
+//                let varToPass = "TESTIGN"
+                NSApp.sendAction(#selector(AppDelegate.openShortcutWindow), to: nil, from: NSNumber(value: pin?.position ?? -1))
+            }) {
+                Text("Setup Global Shortcut")
+            }
+//            .sheet(isPresented: $shortcutWindowOpen) {
+//                ShortcutView(input: $shortcutWindowInput)
+//            }
+            
+            Spacer()
         }
-        .onAppear {
-            customShortcut = KeyboardShortcuts.getShortcut(for: .test)
-        }
+        
         
         Divider()
             .padding(.horizontal, 10)
