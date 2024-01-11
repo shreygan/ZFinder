@@ -11,7 +11,10 @@
 		3545CA272B3BAC1200054449 /* PinnedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3545CA262B3BAC1200054449 /* PinnedManager.swift */; };
 		3545CA292B3C444000054449 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3545CA282B3C444000054449 /* Info.plist */; };
 		355099BF2B4673A000D0CB79 /* WhenHovered.swift in Sources */ = {isa = PBXBuildFile; fileRef = 355099BE2B4673A000D0CB79 /* WhenHovered.swift */; };
-		356A916F2B467A9A00FDEE69 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356A916E2B467A9A00FDEE69 /* Extensions.swift */; };
+		3559A9522B4F682A00468356 /* HotKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3559A9512B4F682A00468356 /* HotKey.swift */; };
+		3559A9542B4F686800468356 /* KeyboardShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3559A9532B4F686800468356 /* KeyboardShortcuts.swift */; };
+		3559A9562B4F689E00468356 /* TapRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3559A9552B4F689E00468356 /* TapRecognizer.swift */; };
+		356A916F2B467A9A00FDEE69 /* General.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356A916E2B467A9A00FDEE69 /* General.swift */; };
 		356B682C2B4E8FE400F7C913 /* CustomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356B682B2B4E8FE400F7C913 /* CustomColor.swift */; };
 		358FBB962B46BA2700041BAA /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 358FBB952B46BA2700041BAA /* DetailView.swift */; };
 		358FBB982B46BCFD00041BAA /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 358FBB972B46BCFD00041BAA /* MainView.swift */; };
@@ -50,7 +53,10 @@
 		3545CA262B3BAC1200054449 /* PinnedManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedManager.swift; sourceTree = "<group>"; };
 		3545CA282B3C444000054449 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ZFinder/Info.plist; sourceTree = "<group>"; };
 		355099BE2B4673A000D0CB79 /* WhenHovered.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhenHovered.swift; sourceTree = "<group>"; };
-		356A916E2B467A9A00FDEE69 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		3559A9512B4F682A00468356 /* HotKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotKey.swift; sourceTree = "<group>"; };
+		3559A9532B4F686800468356 /* KeyboardShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcuts.swift; sourceTree = "<group>"; };
+		3559A9552B4F689E00468356 /* TapRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapRecognizer.swift; sourceTree = "<group>"; };
+		356A916E2B467A9A00FDEE69 /* General.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = General.swift; sourceTree = "<group>"; };
 		356B682B2B4E8FE400F7C913 /* CustomColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColor.swift; sourceTree = "<group>"; };
 		358FBB952B46BA2700041BAA /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		358FBB972B46BCFD00041BAA /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -114,9 +120,12 @@
 		356B682A2B4E8EF900F7C913 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				356A916E2B467A9A00FDEE69 /* Extensions.swift */,
+				356A916E2B467A9A00FDEE69 /* General.swift */,
 				355099BE2B4673A000D0CB79 /* WhenHovered.swift */,
 				356B682B2B4E8FE400F7C913 /* CustomColor.swift */,
+				3559A9512B4F682A00468356 /* HotKey.swift */,
+				3559A9532B4F686800468356 /* KeyboardShortcuts.swift */,
+				3559A9552B4F689E00468356 /* TapRecognizer.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -126,8 +135,7 @@
 			children = (
 				3545CA282B3C444000054449 /* Info.plist */,
 				35E84F252B2D80600027D805 /* ZFinder */,
-				35E84F372B2D80620027D805 /* ZFinderTests */,
-				35E84F412B2D80620027D805 /* ZFinderUITests */,
+				35E84F372B2D80620027D805 /* Tests */,
 				35E84F242B2D80600027D805 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -165,12 +173,13 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		35E84F372B2D80620027D805 /* ZFinderTests */ = {
+		35E84F372B2D80620027D805 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				35E84F412B2D80620027D805 /* ZFinderUITests */,
 				35E84F382B2D80620027D805 /* ZFinderTests.swift */,
 			);
-			path = ZFinderTests;
+			path = Tests;
 			sourceTree = "<group>";
 		};
 		35E84F412B2D80620027D805 /* ZFinderUITests */ = {
@@ -324,14 +333,17 @@
 				359E24902B4E313900827B9F /* ShortcutView.swift in Sources */,
 				358FBB962B46BA2700041BAA /* DetailView.swift in Sources */,
 				356B682C2B4E8FE400F7C913 /* CustomColor.swift in Sources */,
+				3559A9562B4F689E00468356 /* TapRecognizer.swift in Sources */,
 				3545CA272B3BAC1200054449 /* PinnedManager.swift in Sources */,
+				3559A9522B4F682A00468356 /* HotKey.swift in Sources */,
 				35E84F542B2D80C40027D805 /* ApplicationMenu.swift in Sources */,
 				35E84F522B2D809A0027D805 /* SearchView.swift in Sources */,
 				35AD1F512B3AB0E1001E9F84 /* PinView.swift in Sources */,
+				3559A9542B4F686800468356 /* KeyboardShortcuts.swift in Sources */,
 				355099BF2B4673A000D0CB79 /* WhenHovered.swift in Sources */,
 				358FBB9A2B48012900041BAA /* ColorPickerView.swift in Sources */,
 				35E84F272B2D80600027D805 /* ZFinderApp.swift in Sources */,
-				356A916F2B467A9A00FDEE69 /* Extensions.swift in Sources */,
+				356A916F2B467A9A00FDEE69 /* General.swift in Sources */,
 				358FBB982B46BCFD00041BAA /* MainView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
