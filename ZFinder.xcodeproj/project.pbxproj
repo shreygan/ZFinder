@@ -14,6 +14,9 @@
 		3559A9522B4F682A00468356 /* HotKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3559A9512B4F682A00468356 /* HotKey.swift */; };
 		3559A9542B4F686800468356 /* KeyboardShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3559A9532B4F686800468356 /* KeyboardShortcuts.swift */; };
 		3559A9562B4F689E00468356 /* TapRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3559A9552B4F689E00468356 /* TapRecognizer.swift */; };
+		3559A95B2B4FA03800468356 /* SettingsAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 3559A95A2B4FA03800468356 /* SettingsAccess */; };
+		3559A95D2B4FA0D600468356 /* SettingsAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3559A95C2B4FA0D600468356 /* SettingsAccess.swift */; };
+		3559A95F2B4FDD0500468356 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3559A95E2B4FDD0500468356 /* SettingsView.swift */; };
 		356A916F2B467A9A00FDEE69 /* General.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356A916E2B467A9A00FDEE69 /* General.swift */; };
 		356B682C2B4E8FE400F7C913 /* CustomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356B682B2B4E8FE400F7C913 /* CustomColor.swift */; };
 		358FBB962B46BA2700041BAA /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 358FBB952B46BA2700041BAA /* DetailView.swift */; };
@@ -56,6 +59,8 @@
 		3559A9512B4F682A00468356 /* HotKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotKey.swift; sourceTree = "<group>"; };
 		3559A9532B4F686800468356 /* KeyboardShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcuts.swift; sourceTree = "<group>"; };
 		3559A9552B4F689E00468356 /* TapRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapRecognizer.swift; sourceTree = "<group>"; };
+		3559A95C2B4FA0D600468356 /* SettingsAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAccess.swift; sourceTree = "<group>"; };
+		3559A95E2B4FDD0500468356 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		356A916E2B467A9A00FDEE69 /* General.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = General.swift; sourceTree = "<group>"; };
 		356B682B2B4E8FE400F7C913 /* CustomColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColor.swift; sourceTree = "<group>"; };
 		358FBB952B46BA2700041BAA /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
@@ -82,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3559A95B2B4FA03800468356 /* SettingsAccess in Frameworks */,
 				35E384462B4A8B77000B6561 /* HotKey in Frameworks */,
 				353FFB6C2B4D486B00516708 /* KeyboardShortcuts in Frameworks */,
 			);
@@ -111,6 +117,7 @@
 				35AD1F502B3AB0E1001E9F84 /* PinView.swift */,
 				358FBB952B46BA2700041BAA /* DetailView.swift */,
 				359E248F2B4E313900827B9F /* ShortcutView.swift */,
+				3559A95E2B4FDD0500468356 /* SettingsView.swift */,
 				35E84F512B2D809A0027D805 /* SearchView.swift */,
 				358FBB992B48012900041BAA /* ColorPickerView.swift */,
 			);
@@ -126,6 +133,7 @@
 				3559A9512B4F682A00468356 /* HotKey.swift */,
 				3559A9532B4F686800468356 /* KeyboardShortcuts.swift */,
 				3559A9552B4F689E00468356 /* TapRecognizer.swift */,
+				3559A95C2B4FA0D600468356 /* SettingsAccess.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -210,6 +218,7 @@
 			packageProductDependencies = (
 				35E384452B4A8B77000B6561 /* HotKey */,
 				353FFB6B2B4D486B00516708 /* KeyboardShortcuts */,
+				3559A95A2B4FA03800468356 /* SettingsAccess */,
 			);
 			productName = ZFinder;
 			productReference = 35E84F232B2D80600027D805 /* ZFinder.app */;
@@ -286,6 +295,7 @@
 			packageReferences = (
 				35E384442B4A8B77000B6561 /* XCRemoteSwiftPackageReference "HotKey" */,
 				353FFB6A2B4D486B00516708 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
+				3559A9592B4FA03800468356 /* XCRemoteSwiftPackageReference "SettingsAccess" */,
 			);
 			productRefGroup = 35E84F242B2D80600027D805 /* Products */;
 			projectDirPath = "";
@@ -332,8 +342,10 @@
 			files = (
 				359E24902B4E313900827B9F /* ShortcutView.swift in Sources */,
 				358FBB962B46BA2700041BAA /* DetailView.swift in Sources */,
+				3559A95D2B4FA0D600468356 /* SettingsAccess.swift in Sources */,
 				356B682C2B4E8FE400F7C913 /* CustomColor.swift in Sources */,
 				3559A9562B4F689E00468356 /* TapRecognizer.swift in Sources */,
+				3559A95F2B4FDD0500468356 /* SettingsView.swift in Sources */,
 				3545CA272B3BAC1200054449 /* PinnedManager.swift in Sources */,
 				3559A9522B4F682A00468356 /* HotKey.swift in Sources */,
 				35E84F542B2D80C40027D805 /* ApplicationMenu.swift in Sources */,
@@ -673,6 +685,14 @@
 				minimumVersion = 1.16.1;
 			};
 		};
+		3559A9592B4FA03800468356 /* XCRemoteSwiftPackageReference "SettingsAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/orchetect/SettingsAccess";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.0;
+			};
+		};
 		35E384442B4A8B77000B6561 /* XCRemoteSwiftPackageReference "HotKey" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/soffes/HotKey";
@@ -688,6 +708,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 353FFB6A2B4D486B00516708 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
 			productName = KeyboardShortcuts;
+		};
+		3559A95A2B4FA03800468356 /* SettingsAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3559A9592B4FA03800468356 /* XCRemoteSwiftPackageReference "SettingsAccess" */;
+			productName = SettingsAccess;
 		};
 		35E384452B4A8B77000B6561 /* HotKey */ = {
 			isa = XCSwiftPackageProductDependency;

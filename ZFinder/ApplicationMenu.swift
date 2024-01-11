@@ -7,8 +7,12 @@
 
 import Foundation
 import SwiftUI
+import SettingsAccess
 
 class ApplicationMenu: NSObject {
+//    let controller = ExternalWindowController(rootView: SettingsView())
+    var controller: NSWindowController? = nil
+    
     let menu = NSMenu()
     
     func createMenu() -> NSMenu {
@@ -33,6 +37,10 @@ class ApplicationMenu: NSObject {
 //        test.target = self
 //        menu.addItem(test)
         
+        let settings = NSMenuItem(title: "Preferences", action: #selector(openSettings), keyEquivalent: ",")
+        settings.target = self
+        menu.addItem(settings)
+        
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         
         return menu
@@ -41,4 +49,45 @@ class ApplicationMenu: NSObject {
     @objc func printTest() {
         print("Test")
     }
+    
+    @objc func openSettings() {
+//        let settingsView = SettingsView()
+//        let controller = ExternalWindowController(rootView: settingsView)
+        
+        if controller == nil {
+            let settingsView = SettingsView()
+            controller = ExternalWindowController(rootView: settingsView)
+            controller!.window?.title = "ZFinder Settings"
+            controller!.showWindow(nil)
+        }
+        
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate(ignoringOtherApps: true)
+        controller!.window?.orderFrontRegardless()
+        controller!.window?.makeKeyAndOrderFront(self)
+        controller!.window?.titlebarAppearsTransparent = true
+    }
 }
+
+//let newWindow = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 50, height: 50),
+//                         styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
+//                         backing: .buffered,
+//                         defer: false)
+//
+//newWindow.center()
+//newWindow.contentView = NSHostingView(rootView: shortcutView)
+//newWindow.isReleasedWhenClosed = false
+//
+//newWindow.title = "Set Shortcut for '\(pin?.name ?? "")'"
+//
+//let visualEffect = NSVisualEffectView()
+//visualEffect.blendingMode = .behindWindow
+//visualEffect.state = .active
+//visualEffect.appearance = NSAppearance(named: .vibrantDark)
+//newWindow.contentView = visualEffect
+//
+//newWindow.titlebarAppearsTransparent = true
+//newWindow.styleMask.insert(.fullSizeContentView)
+//
+//newWindow.makeKeyAndOrderFront(nil)
+

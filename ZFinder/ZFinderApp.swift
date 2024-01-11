@@ -7,6 +7,8 @@
 
 import SwiftUI
 import KeyboardShortcuts
+import SettingsAccess
+import Combine
 
 @main
 struct ZFinderApp: App {
@@ -14,11 +16,8 @@ struct ZFinderApp: App {
     
     var body: some Scene {
         Settings {
-            EmptyView()
+            MainView()
         }
-//        WindowGroup("Shortcut Input", for: UUID.self) { $pin in
-//            ShortcutView(pinID: pin)
-//        }
     }
 }
 
@@ -29,7 +28,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     
     let menu = ApplicationMenu()
     
-//    var shortcutWindow: NSWindow!
     var shortcutWindows: [NSNumber: NSWindow] = [:]
     
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -59,12 +57,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             
             newWindow.title = "Set Shortcut for '\(pin?.name ?? "")'"
             
-//            shortcutWindows[pinID ?? ] = newWindow
-            
             let visualEffect = NSVisualEffectView()
             visualEffect.blendingMode = .behindWindow
             visualEffect.state = .active
-//            visualEffect.material = .dark
             visualEffect.appearance = NSAppearance(named: .vibrantDark)
             newWindow.contentView = visualEffect
 
@@ -72,23 +67,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             newWindow.styleMask.insert(.fullSizeContentView)
             
             newWindow.makeKeyAndOrderFront(nil)
-            
-            
-//            if shortcutWindow == nil {
-//                let shortcutView = ShortcutView()
-//
-//                shortcutWindow = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 50, height: 50),
-//                                          styleMask: [.titled, .closable, .fullSizeContentView],
-//                                          backing: .buffered,
-//                                          defer: false)
-//                shortcutWindow.center()
-//                shortcutWindow.contentView = NSHostingView(rootView: shortcutView)
-//                //            shortcutWindow.title = title ?? "NO TITLE"
-//                //            print("TITLE: \(title ?? "NO TITLE")")
-//                
-//                shortcutWindow.isReleasedWhenClosed = false
-//            }
-//            shortcutWindow.makeKeyAndOrderFront(nil)
         }
     }
 }
+
+
+struct AppState {
+    let openSettingsSignal = PassthroughSubject<Void, Never>()
+}
+
+
