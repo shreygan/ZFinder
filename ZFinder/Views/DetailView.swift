@@ -263,6 +263,7 @@ struct DetailView: View {
         .padding(.bottom, 5)
         
         Divider()
+            .padding(.horizontal, 10)
         
 //        Form {
 //            KeyboardShortcuts.Recorder("test:", name: .test)
