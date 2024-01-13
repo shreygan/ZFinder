@@ -43,16 +43,12 @@ struct SettingsView: View {
 //        }
 //        .toggleStyle(ButtonToggleStyle())
 //        .padding(.vertical, 30)
-        Form {
-            LaunchAtLogin.Toggle()
-        }
-        .padding(.top, 25)
-        .padding(.bottom, 30)
+        LaunchAtLogin.Toggle()
+            .padding(.vertical, 30)
         
 //        Tottl3(ison: )
         
 //        Spacer()
-        
 
         
         Spacer()
