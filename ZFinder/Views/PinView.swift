@@ -317,36 +317,23 @@ struct PinView: View {
                         .font(.headline)
                         .lineLimit(1)
                 }
-                .if(!reorderMode && !deleteMode) { view in
-                    view.onHover { hovering in
-                        if hovering {
-                            withAnimation(.easeInOut(duration: 0.1).delay(1)) {
-                                showFolderPath1 = hovering
-                            }
-                        } else {
-                            withAnimation(.easeInOut(duration: 0.1)) {
-                                showFolderPath1 = hovering
-                            }
-                        }
-                    }
-                }
+//                .if(!reorderMode && !deleteMode) { view in
+//                    view.onHover { hovering in
+//                        if hovering {
+//                            withAnimation(.easeInOut(duration: 0.1).delay(1.5)) {
+//                                showFolderPath1 = hovering
+//                            }
+//                        } else {
+//                            withAnimation(.easeInOut(duration: 0.01)) {
+//                                showFolderPath1 = hovering
+//                            }
+//                        }
+//                    }
+//                }
             } else {
                 Text(pin.name)
                     .font(.headline)
                     .lineLimit(1)
-                    .if(!reorderMode && !deleteMode) { view in
-                        view.onHover { hovering in
-                            if hovering {
-                                withAnimation(.easeInOut(duration: 0.1).delay(1)) {
-                                    showFolderPath2 = hovering
-                                }
-                            } else {
-                                withAnimation(.easeInOut(duration: 0.1)) {
-                                    showFolderPath2 = hovering
-                                }
-                            }
-                        }
-                    }
                     .truncationMode(.head)
             }
             
@@ -361,6 +348,19 @@ struct PinView: View {
                 }
                 .buttonStyle(.borderless)
                 .padding(.trailing, 10)
+            }
+        }
+        .if(!reorderMode && !deleteMode) { view in
+            view.onHover { hovering in
+                if hovering {
+//                    withAnimation(.easeInOut(duration: 0.1).delay(1.5)) {
+                    showFolderPath2 = hovering
+//                    }
+                } else {
+//                    withAnimation(.easeInOut(duration: 0.01)) {
+                    showFolderPath2 = false
+//                    }
+                }
             }
         }
     }
