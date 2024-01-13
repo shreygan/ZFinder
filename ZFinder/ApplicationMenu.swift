@@ -57,10 +57,7 @@ class ApplicationMenu: NSObject {
             controller!.showWindow(nil)
         }
         
-        print(NSApp.activationPolicy().rawValue)
-        
         NSApp.setActivationPolicy(.regular)
-        print(NSApp.activationPolicy().rawValue)
         NSApp.activate(ignoringOtherApps: true)
         controller!.window?.orderFrontRegardless()
         controller!.window?.makeKeyAndOrderFront(self)

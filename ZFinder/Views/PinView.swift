@@ -9,11 +9,13 @@ import SwiftUI
 import HotKey
 
 struct PinView: View {
+    @AppStorage("hideFileExtensions") private var hideFileExtensions = false
+    
     @State private var pinned: [Pin]
     @State private var search = ""
     @State private var searchPath = false
     @State private var hoveredPin: Pin?
-    @State private var showFolderPath1 = false
+    @State private var showFolderPath = false
     @State private var showFolderPath2 = false
     @State private var reorderMode = false
     @State private var deleteMode = false
@@ -311,42 +313,16 @@ struct PinView: View {
     
     private func pinnedEntryNotDeletingView(_ pin: Pin) -> some View {
         HStack {
-            if (showFolderPath1 || showFolderPath2) && pin == hoveredPin {
+            if (showFolderPath) && pin == hoveredPin {
                 ScrollView(.horizontal, showsIndicators: false) {
                     Text(pin.path.path(percentEncoded: false))
                         .font(.headline)
                         .lineLimit(1)
                 }
-                .if(!reorderMode && !deleteMode) { view in
-                    view.onHover { hovering in
-                        if hovering {
-                            withAnimation(.easeInOut(duration: 0.1).delay(1)) {
-                                showFolderPath1 = hovering
-                            }
-                        } else {
-                            withAnimation(.easeInOut(duration: 0.1)) {
-                                showFolderPath1 = hovering
-                            }
-                        }
-                    }
-                }
             } else {
-                Text(pin.name)
+                Text(hideFileExtensions ? pin.nameNoExt : pin.name)
                     .font(.headline)
                     .lineLimit(1)
-                    .if(!reorderMode && !deleteMode) { view in
-                        view.onHover { hovering in
-                            if hovering {
-                                withAnimation(.easeInOut(duration: 0.1).delay(1)) {
-                                    showFolderPath2 = hovering
-                                }
-                            } else {
-                                withAnimation(.easeInOut(duration: 0.1)) {
-                                    showFolderPath2 = hovering
-                                }
-                            }
-                        }
-                    }
                     .truncationMode(.head)
             }
             
@@ -361,6 +337,19 @@ struct PinView: View {
                 }
                 .buttonStyle(.borderless)
                 .padding(.trailing, 10)
+            }
+        }
+        .if(!reorderMode && !deleteMode) { view in
+            view.onHover { hovering in
+                if hovering {
+                    withAnimation(.easeInOut(duration: 0.1).delay(1)) {
+                        showFolderPath = hovering
+                    }
+                } else {
+                    withAnimation(.easeInOut(duration: 0.01)) {
+                        showFolderPath = hovering
+                    }
+                }
             }
         }
     }

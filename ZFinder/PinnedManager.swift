@@ -15,6 +15,18 @@ struct Pin: Hashable, Identifiable, Comparable, CustomStringConvertible {
     var color: CustomColor
     var path: URL
     
+    var nameNoExt: String {
+        guard let dotIndex = name.lastIndex(of: ".") else {
+            return name
+        }
+        
+        if name.startIndex < dotIndex {
+            return String(name[..<dotIndex])
+        }
+        
+        return name
+    }
+    
     var description: String {
         return "Pin(id: \(id), position: \(position), name: \(name), file: \(file), color: \(color), path: \(path)\n"
     }
@@ -171,5 +183,9 @@ class PinnedManager {
         }
         
         return nil
+    }
+    
+    func deleteAllPins() {
+        savePinned([])
     }
 }

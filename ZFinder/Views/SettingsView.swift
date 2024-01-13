@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import LaunchAtLogin
 
 struct SettingsView: View {    
     @AppStorage("hideFileExtensions") private var hideFileExtensions = false
@@ -13,8 +14,9 @@ struct SettingsView: View {
     
     @State private var showDeleteConf = false
     
-    var body: some View {        
-        
+    let pinnedManager = PinnedManager()
+    
+    var body: some View {
         Button("Delete All Pins") {
             showDeleteConf = true
         }
@@ -24,22 +26,28 @@ struct SettingsView: View {
         .buttonStyle(BorderedButtonStyle())
         .confirmationDialog("Are you sure you want to delete all pins?", isPresented: $showDeleteConf) {
             Button("Delete", role: .destructive) {
-                print("DELETING")
+//                print("DELETING")
+                pinnedManager.deleteAllPins()
             }
         }
-        .padding(.top, 35)
+        .padding(.top, 40)
         .padding(.bottom, 30)
         
         Toggle(isOn: $hideFileExtensions) {
             Text("\(hideFileExtensions ? "Hide" : "Show") File Extensions")
         }
-        .toggleStyle(ButtonToggleStyle())
+//        .toggleStyle(())
         
-        Toggle(isOn: $launchAtLogin) {
-            Text("Launch ZFinder at Login")
+//        Toggle(isOn: $launchAtLogin) {
+//            Text("Launch ZFinder at Login")
+//        }
+//        .toggleStyle(ButtonToggleStyle())
+//        .padding(.vertical, 30)
+        Form {
+            LaunchAtLogin.Toggle()
         }
-        .toggleStyle(ButtonToggleStyle())
-        .padding(.vertical, 30)
+        .padding(.top, 25)
+        .padding(.bottom, 30)
         
 //        Tottl3(ison: )
         

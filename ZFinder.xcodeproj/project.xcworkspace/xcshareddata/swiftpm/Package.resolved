@@ -19,6 +19,15 @@
       }
     },
     {
+      "identity" : "launchatlogin-modern",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sindresorhus/LaunchAtLogin-Modern",
+      "state" : {
+        "branch" : "main",
+        "revision" : "a04ec1c363be3627734f6dad757d82f5d4fa8fcc"
+      }
+    },
+    {
       "identity" : "settingsaccess",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/orchetect/SettingsAccess",

@@ -10,6 +10,8 @@ import QuickLook
 import KeyboardShortcuts
 
 struct DetailView: View {
+    @AppStorage("hideFileExtensions") private var hideFileExtensions = false
+    
     @State private var hoveredComp: Int?
     @State private var hoveredColor: CustomColor?
     @State private var hoveringBack = false
@@ -129,7 +131,7 @@ struct DetailView: View {
                         )
                         
                     } else {
-                        Text(pin?.name ?? "")
+                        Text(hideFileExtensions ? (pin?.nameNoExt ?? "") : (pin?.name ?? ""))
                             .font(.title3)
                             .fontWeight(.heavy)
                             .padding(3)

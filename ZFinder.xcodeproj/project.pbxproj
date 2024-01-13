@@ -19,6 +19,7 @@
 		3559A95F2B4FDD0500468356 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3559A95E2B4FDD0500468356 /* SettingsView.swift */; };
 		356A916F2B467A9A00FDEE69 /* General.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356A916E2B467A9A00FDEE69 /* General.swift */; };
 		356B682C2B4E8FE400F7C913 /* CustomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356B682B2B4E8FE400F7C913 /* CustomColor.swift */; };
+		3577CBC62B5339FE00E0FEC1 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 3577CBC52B5339FE00E0FEC1 /* LaunchAtLogin */; };
 		358FBB962B46BA2700041BAA /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 358FBB952B46BA2700041BAA /* DetailView.swift */; };
 		358FBB982B46BCFD00041BAA /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 358FBB972B46BCFD00041BAA /* MainView.swift */; };
 		358FBB9A2B48012900041BAA /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 358FBB992B48012900041BAA /* ColorPickerView.swift */; };
@@ -89,6 +90,7 @@
 			files = (
 				3559A95B2B4FA03800468356 /* SettingsAccess in Frameworks */,
 				35E384462B4A8B77000B6561 /* HotKey in Frameworks */,
+				3577CBC62B5339FE00E0FEC1 /* LaunchAtLogin in Frameworks */,
 				353FFB6C2B4D486B00516708 /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -219,6 +221,7 @@
 				35E384452B4A8B77000B6561 /* HotKey */,
 				353FFB6B2B4D486B00516708 /* KeyboardShortcuts */,
 				3559A95A2B4FA03800468356 /* SettingsAccess */,
+				3577CBC52B5339FE00E0FEC1 /* LaunchAtLogin */,
 			);
 			productName = ZFinder;
 			productReference = 35E84F232B2D80600027D805 /* ZFinder.app */;
@@ -296,6 +299,7 @@
 				35E384442B4A8B77000B6561 /* XCRemoteSwiftPackageReference "HotKey" */,
 				353FFB6A2B4D486B00516708 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				3559A9592B4FA03800468356 /* XCRemoteSwiftPackageReference "SettingsAccess" */,
+				3577CBC42B5339FE00E0FEC1 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
 			);
 			productRefGroup = 35E84F242B2D80600027D805 /* Products */;
 			projectDirPath = "";
@@ -693,6 +697,14 @@
 				minimumVersion = 1.4.0;
 			};
 		};
+		3577CBC42B5339FE00E0FEC1 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin-Modern";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		35E384442B4A8B77000B6561 /* XCRemoteSwiftPackageReference "HotKey" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/soffes/HotKey";
@@ -713,6 +725,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3559A9592B4FA03800468356 /* XCRemoteSwiftPackageReference "SettingsAccess" */;
 			productName = SettingsAccess;
+		};
+		3577CBC52B5339FE00E0FEC1 /* LaunchAtLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3577CBC42B5339FE00E0FEC1 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */;
+			productName = LaunchAtLogin;
 		};
 		35E384452B4A8B77000B6561 /* HotKey */ = {
 			isa = XCSwiftPackageProductDependency;
