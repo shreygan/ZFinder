@@ -69,6 +69,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             newWindow.makeKeyAndOrderFront(nil)
         }
     }
+    
+    @objc func setActivationPolicyAccessory() {
+        NSApp.setActivationPolicy(.accessory)
+    }
 }
 
 

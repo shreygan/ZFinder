@@ -10,7 +10,6 @@ import SwiftUI
 import SettingsAccess
 
 class ApplicationMenu: NSObject {
-//    let controller = ExternalWindowController(rootView: SettingsView())
     var controller: NSWindowController? = nil
     
     let menu = NSMenu()
@@ -51,9 +50,6 @@ class ApplicationMenu: NSObject {
     }
     
     @objc func openSettings() {
-//        let settingsView = SettingsView()
-//        let controller = ExternalWindowController(rootView: settingsView)
-        
         if controller == nil {
             let settingsView = SettingsView()
             controller = ExternalWindowController(rootView: settingsView)
@@ -61,10 +57,14 @@ class ApplicationMenu: NSObject {
             controller!.showWindow(nil)
         }
         
+        print(NSApp.activationPolicy().rawValue)
+        
         NSApp.setActivationPolicy(.regular)
+        print(NSApp.activationPolicy().rawValue)
         NSApp.activate(ignoringOtherApps: true)
         controller!.window?.orderFrontRegardless()
         controller!.window?.makeKeyAndOrderFront(self)
+        controller!.window?.isReleasedWhenClosed = false
         controller!.window?.titlebarAppearsTransparent = true
     }
 }
