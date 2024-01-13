@@ -15,8 +15,6 @@ struct PinView: View {
     @State private var search = ""
     @State private var searchPath = false
     @State private var hoveredPin: Pin?
-    @State private var showFolderPath = false
-    @State private var showFolderPath2 = false
     @State private var reorderMode = false
     @State private var deleteMode = false
     @State private var count = 0
@@ -313,18 +311,10 @@ struct PinView: View {
     
     private func pinnedEntryNotDeletingView(_ pin: Pin) -> some View {
         HStack {
-            if (showFolderPath) && pin == hoveredPin {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    Text(pin.path.path(percentEncoded: false))
-                        .font(.headline)
-                        .lineLimit(1)
-                }
-            } else {
-                Text(hideFileExtensions ? pin.nameNoExt : pin.name)
-                    .font(.headline)
-                    .lineLimit(1)
-                    .truncationMode(.head)
-            }
+            Text(hideFileExtensions ? pin.nameNoExt : pin.name)
+                .font(.headline)
+                .lineLimit(1)
+                .truncationMode(.head)
             
             Spacer()
             
