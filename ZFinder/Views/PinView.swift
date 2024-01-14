@@ -329,19 +329,6 @@ struct PinView: View {
                 .padding(.trailing, 10)
             }
         }
-        .if(!reorderMode && !deleteMode) { view in
-            view.onHover { hovering in
-                if hovering {
-                    withAnimation(.easeInOut(duration: 0.1).delay(1)) {
-                        showFolderPath = hovering
-                    }
-                } else {
-                    withAnimation(.easeInOut(duration: 0.01)) {
-                        showFolderPath = hovering
-                    }
-                }
-            }
-        }
     }
     
     private func deletePin(_ folder: Pin) {
@@ -358,7 +345,7 @@ struct PinView: View {
         let dirPicker = NSOpenPanel()
         dirPicker.canChooseFiles = true
         dirPicker.canChooseDirectories = true
-        dirPicker.allowsMultipleSelection = false
+        dirPicker.allowsMultipleSelection = true
         dirPicker.canDownloadUbiquitousContents = true
         dirPicker.canResolveUbiquitousConflicts = true
         
@@ -367,8 +354,10 @@ struct PinView: View {
         dirPicker.center()
         
         if dirPicker.runModal() == .OK {
-            if let path = dirPicker.url?.path(percentEncoded: false) {
-                pinnedManager.addPin(file: path.last! != "/", path: path)
+            let paths = dirPicker.urls
+            
+            for path in paths {
+                pinnedManager.addPin(file: path.path().last! != "/", path: path.path())
             }
         }
         pinned = pinnedManager.getPinned()
