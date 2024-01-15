@@ -20,6 +20,7 @@
 		356A916F2B467A9A00FDEE69 /* General.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356A916E2B467A9A00FDEE69 /* General.swift */; };
 		356B682C2B4E8FE400F7C913 /* CustomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356B682B2B4E8FE400F7C913 /* CustomColor.swift */; };
 		3577CBCA2B533E3D00E0FEC1 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 3577CBC92B533E3D00E0FEC1 /* LaunchAtLogin */; };
+		3587711E2B538AD700452821 /* NSImageResize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3587711D2B538AD700452821 /* NSImageResize.swift */; };
 		358FBB962B46BA2700041BAA /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 358FBB952B46BA2700041BAA /* DetailView.swift */; };
 		358FBB982B46BCFD00041BAA /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 358FBB972B46BCFD00041BAA /* MainView.swift */; };
 		358FBB9A2B48012900041BAA /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 358FBB992B48012900041BAA /* ColorPickerView.swift */; };
@@ -64,6 +65,8 @@
 		3559A95E2B4FDD0500468356 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		356A916E2B467A9A00FDEE69 /* General.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = General.swift; sourceTree = "<group>"; };
 		356B682B2B4E8FE400F7C913 /* CustomColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColor.swift; sourceTree = "<group>"; };
+		3587711C2B5378C800452821 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		3587711D2B538AD700452821 /* NSImageResize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImageResize.swift; sourceTree = "<group>"; };
 		358FBB952B46BA2700041BAA /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		358FBB972B46BCFD00041BAA /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		358FBB992B48012900041BAA /* ColorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
@@ -136,6 +139,7 @@
 				3559A9532B4F686800468356 /* KeyboardShortcuts.swift */,
 				3559A9552B4F689E00468356 /* TapRecognizer.swift */,
 				3559A95C2B4FA0D600468356 /* SettingsAccess.swift */,
+				3587711D2B538AD700452821 /* NSImageResize.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -143,6 +147,7 @@
 		35E84F1A2B2D80600027D805 = {
 			isa = PBXGroup;
 			children = (
+				3587711C2B5378C800452821 /* README.md */,
 				3545CA282B3C444000054449 /* Info.plist */,
 				35E84F252B2D80600027D805 /* ZFinder */,
 				35E84F372B2D80620027D805 /* Tests */,
@@ -360,6 +365,7 @@
 				358FBB9A2B48012900041BAA /* ColorPickerView.swift in Sources */,
 				35E84F272B2D80600027D805 /* ZFinderApp.swift in Sources */,
 				356A916F2B467A9A00FDEE69 /* General.swift in Sources */,
+				3587711E2B538AD700452821 /* NSImageResize.swift in Sources */,
 				358FBB982B46BCFD00041BAA /* MainView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -535,7 +541,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.3.3;
+				MARKETING_VERSION = 0.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ZFinder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -563,7 +569,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.3.3;
+				MARKETING_VERSION = 0.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ZFinder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

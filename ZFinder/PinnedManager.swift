@@ -6,14 +6,26 @@
 //
 
 import Foundation
+import AppKit
 
 struct Pin: Hashable, Identifiable, Comparable, CustomStringConvertible {
     var id: UUID
     var position: Int
     var name: String
-    var file: Bool
+    var isFile: Bool
     var color: CustomColor
     var path: URL
+    var isApp: Bool
+    
+    var icon: NSImage?
+    
+//    var icon: NSImage? {
+//        if isApp {
+//            return NSWorkspace.shared.icon(forFile: path.path()).resized(to: NSSize(width: 22.5, height: 22.5))
+//        } else {
+//            return nil
+//        }
+//    }
     
     var nameNoExt: String {
         guard let dotIndex = name.lastIndex(of: ".") else {
@@ -28,7 +40,7 @@ struct Pin: Hashable, Identifiable, Comparable, CustomStringConvertible {
     }
     
     var description: String {
-        return "Pin(id: \(id), position: \(position), name: \(name), file: \(file), color: \(color), path: \(path)\n"
+        return "Pin(id: \(id), position: \(position), name: \(name), file: \(isFile), color: \(color), path: \(path)\n"
     }
     
     var fileType: String {
@@ -39,9 +51,14 @@ struct Pin: Hashable, Identifiable, Comparable, CustomStringConvertible {
         self.id = UUID()
         self.position = position
         self.name = name
-        self.file = file
+        self.isFile = file
         self.color = color
         self.path = path
+        self.isApp = path.pathExtension == "app"
+        
+        if self.isApp {
+            self.icon = NSWorkspace.shared.icon(forFile: path.path()).resized(to: NSSize(width: 22.5, height: 22.5))
+        }
     }
     
     static func < (lhs: Pin, rhs: Pin) -> Bool {
@@ -123,7 +140,7 @@ class PinnedManager {
     
     func savePinned(_ pins: [Pin]) {
         do {
-            let lines = pins.map { "\($0.position),\($0.name),\($0.file),\($0.color.name),\($0.path.path(percentEncoded: false))" }
+            let lines = pins.map { "\($0.position),\($0.name),\($0.isFile),\($0.color.name),\($0.path.path(percentEncoded: false))" }
             let content = lines.joined(separator: "\n")
             
             try content.write(to: fileURL, atomically: true, encoding: .utf8)

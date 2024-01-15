@@ -24,7 +24,9 @@ struct PinView: View {
     @State private var hoveringType = false
     @State private var deleting = false
     @State private var deletingPin: Pin?
-    @State var url: URL?
+    @State private var url: URL?
+    
+    @State private var icons: [Pin: NSImage?] = [:]
     
     @Binding private var selectedPin: Pin?
     
@@ -199,33 +201,11 @@ struct PinView: View {
     
     private func pinnedEntryView(_ pin: Pin) -> some View {
         HStack {
-            Image(systemName: pin.file ? extToSFSymbol(ext: pin.fileType) : "folder")
-//                .tapRecognizer(tapSensitivity: 0.2, singleTapAction: { print("SINGLE CLICK") }, doubleTapAction: { print("DOUBLE CLICK") })
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 20, height: 20)
-                .foregroundColor(pin.file ? .gray : .blue)
-                .padding(.leading, 10)
-                .font(hoveringType && hoveredPin == pin ? .title2 : .title3)
-                .quickLookPreview($url)
-                .onHover { hovering in
-                    withAnimation(.easeInOut(duration: 0.1)) {
-                        hoveringType = hovering
-                    }
-                }
-                .if(!reorderMode) { view in
-                    view.onTapGesture(count: 2) {
-                        url = (url == nil ? URL(fileURLWithPath: pin.path.path(percentEncoded: false)) : nil)
-                    }
-                }
-                .if(!reorderMode) { view in
-                    view.onTapGesture {
-                        if url == nil {
-                            openFinder(pin.path.path(percentEncoded: false))
-                        } else {
-                            url = nil
-                        }
-                    }
-                }
+            if pin.isApp {
+                pinnedEntryAppIcon(pin)
+            } else {
+                pinnedEntryOtherIcon(pin)
+            }
             
             if deleting && deletingPin == pin {
                 pinnedEntryDeletingView()
@@ -331,6 +311,57 @@ struct PinView: View {
         }
     }
     
+    private func pinnedEntryAppIcon(_ pin: Pin) -> some View {
+        Image(nsImage: pin.icon!)
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 20, height: 20)
+            .padding(.leading, 10)
+            .quickLookPreview($url)
+            .if(!reorderMode) { view in
+                view.onTapGesture(count: 2) {
+                    url = (url == nil ? URL(fileURLWithPath: pin.path.path(percentEncoded: false)) : nil)
+                }
+            }
+            .if(!reorderMode) { view in
+                view.onTapGesture {
+                    if url == nil {
+                        openFinder(pin.path.path(percentEncoded: false))
+                    } else {
+                        url = nil
+                    }
+                }
+            }
+    }
+    
+    private func pinnedEntryOtherIcon(_ pin: Pin) -> some View {
+        Image(systemName: pin.isFile ? extToSFSymbol(ext: pin.fileType) : "folder")
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 20, height: 20)
+            .foregroundColor(pin.isFile ? .gray : .blue)
+            .padding(.leading, 10)
+            .font(hoveringType && hoveredPin == pin ? .title2 : .title3)
+            .quickLookPreview($url)
+            .onHover { hovering in
+                withAnimation(.easeInOut(duration: 0.1)) {
+                    hoveringType = hovering
+                }
+            }
+            .if(!reorderMode) { view in
+                view.onTapGesture(count: 2) {
+                    url = (url == nil ? URL(fileURLWithPath: pin.path.path(percentEncoded: false)) : nil)
+                }
+            }
+            .if(!reorderMode) { view in
+                view.onTapGesture {
+                    if url == nil {
+                        openFinder(pin.path.path(percentEncoded: false))
+                    } else {
+                        url = nil
+                    }
+                }
+            }
+    }
+    
     private func deletePin(_ folder: Pin) {
         pinnedManager.deletePin(folder)
         pinned = pinnedManager.getPinned()
@@ -357,7 +388,7 @@ struct PinView: View {
             let paths = dirPicker.urls
             
             for path in paths {
-                pinnedManager.addPin(file: path.path().last! != "/", path: path.path())
+                pinnedManager.addPin(file: path.path().last! != "/" || path.pathExtension == "app", path: path.path())
             }
         }
         pinned = pinnedManager.getPinned()

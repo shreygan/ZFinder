@@ -69,28 +69,53 @@ struct DetailView: View {
             }
             
             if let pin = pin {
-                Image(systemName: pin.file ? extToSFSymbol(ext: pin.fileType) : "folder")
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 20, height: 20)
-                    .foregroundColor(pin.file ? .gray : .blue)
-                    .padding(.leading, 5)
-                    .padding(.trailing, -2)
-                    .font(hoveringType ? .title2 : .title3)
-                    .onHover { hovering in
-                        withAnimation(.easeInOut(duration: 0.1)) {
-                            hoveringType = hovering
+                if pin.isApp {
+                    Image(nsImage: pin.icon!)
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20)
+                        .foregroundColor(pin.isFile ? .gray : .blue)
+                        .padding(.leading, 5)
+                        .padding(.trailing, -2)
+                        .font(hoveringType ? .title2 : .title3)
+                        .onHover { hovering in
+                            withAnimation(.easeInOut(duration: 0.1)) {
+                                hoveringType = hovering
+                            }
                         }
-                    }
-                    .onTapGesture(count: 2) {
-                        url = (url == nil ? URL(fileURLWithPath: pin.path.path(percentEncoded: false)) : nil)
-                    }
-                    .onTapGesture {
-                        if url == nil {
-                            openFinder(pin.path.path(percentEncoded: false))
-                        } else {
-                            url = nil
+                        .onTapGesture(count: 2) {
+                            url = (url == nil ? URL(fileURLWithPath: pin.path.path(percentEncoded: false)) : nil)
                         }
-                    }
+                        .onTapGesture {
+                            if url == nil {
+                                openFinder(pin.path.path(percentEncoded: false))
+                            } else {
+                                url = nil
+                            }
+                        }
+                } else {
+                    Image(systemName: pin.isFile ? extToSFSymbol(ext: pin.fileType) : "folder")
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20)
+                        .foregroundColor(pin.isFile ? .gray : .blue)
+                        .padding(.leading, 5)
+                        .padding(.trailing, -2)
+                        .font(hoveringType ? .title2 : .title3)
+                        .onHover { hovering in
+                            withAnimation(.easeInOut(duration: 0.1)) {
+                                hoveringType = hovering
+                            }
+                        }
+                        .onTapGesture(count: 2) {
+                            url = (url == nil ? URL(fileURLWithPath: pin.path.path(percentEncoded: false)) : nil)
+                        }
+                        .onTapGesture {
+                            if url == nil {
+                                openFinder(pin.path.path(percentEncoded: false))
+                            } else {
+                                url = nil
+                            }
+                        }
+                }
             }
             
             HStack {
