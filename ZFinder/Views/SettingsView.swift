@@ -12,21 +12,20 @@ struct SettingsView: View {
     @AppStorage("hideFileExtensions") private var hideFileExtensions = false
     @AppStorage("launchAtLogin") private var launchAtLogin = false
     
-    @State private var showDeleteConf = false
+    @State private var isShowingDeleteConfirmation = false
     
     let pinnedManager = PinnedManager()
     
     var body: some View {
         Button("Delete All Pins") {
-            showDeleteConf = true
+            isShowingDeleteConfirmation = true
         }
         .onReceive(NotificationCenter.default.publisher(for: NSWindow.willCloseNotification)) { newValue in
             AppDelegate.instance.setActivationPolicyAccessory()
         }
         .buttonStyle(BorderedButtonStyle())
-        .confirmationDialog("Are you sure you want to delete all pins?", isPresented: $showDeleteConf) {
+        .confirmationDialog("Are you sure you want to delete all pins?", isPresented: $isShowingDeleteConfirmation) {
             Button("Delete", role: .destructive) {
-//                print("DELETING")
                 pinnedManager.deleteAllPins()
             }
         }
@@ -36,20 +35,9 @@ struct SettingsView: View {
         Toggle(isOn: $hideFileExtensions) {
             Text("\(hideFileExtensions ? "Hide" : "Show") File Extensions")
         }
-//        .toggleStyle(())
         
-//        Toggle(isOn: $launchAtLogin) {
-//            Text("Launch ZFinder at Login")
-//        }
-//        .toggleStyle(ButtonToggleStyle())
-//        .padding(.vertical, 30)
         LaunchAtLogin.Toggle()
             .padding(.vertical, 30)
-        
-//        Tottl3(ison: )
-        
-//        Spacer()
-
         
         Spacer()
     }

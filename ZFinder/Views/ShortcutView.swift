@@ -35,4 +35,3 @@ struct ShortcutView: View {
 #Preview {
     ShortcutView(pin: PinnedManager().getPinned()[0])
 }
-

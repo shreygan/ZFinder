@@ -16,26 +16,16 @@ struct Pin: Hashable, Identifiable, Comparable, CustomStringConvertible {
     var color: CustomColor
     var path: URL
     var isApp: Bool
-    
     var icon: NSImage?
-    
-//    var icon: NSImage? {
-//        if isApp {
-//            return NSWorkspace.shared.icon(forFile: path.path()).resized(to: NSSize(width: 22.5, height: 22.5))
-//        } else {
-//            return nil
-//        }
-//    }
+    var quickLook: QLCoordinator
     
     var nameNoExt: String {
         guard let dotIndex = name.lastIndex(of: ".") else {
             return name
         }
-        
         if name.startIndex < dotIndex {
             return String(name[..<dotIndex])
         }
-        
         return name
     }
     
@@ -54,11 +44,17 @@ struct Pin: Hashable, Identifiable, Comparable, CustomStringConvertible {
         self.isFile = file
         self.color = color
         self.path = path
-        self.isApp = path.pathExtension == "app"
         
+        self.isApp = path.pathExtension == "app"
         if self.isApp {
-            self.icon = NSWorkspace.shared.icon(forFile: path.path()).resized(to: NSSize(width: 22.5, height: 22.5))
+            if #available(macOS 13.0, *) {
+                self.icon = NSWorkspace.shared.icon(forFile: path.path()).resized(to: NSSize(width: 22.5, height: 22.5))
+            } else {
+                self.icon = NSWorkspace.shared.icon(forFile: path.path).resized(to: NSSize(width: 22.5, height: 22.5))
+            }
         }
+        
+        self.quickLook = QLCoordinator(path: self.path.path())
     }
     
     static func < (lhs: Pin, rhs: Pin) -> Bool {
@@ -83,9 +79,6 @@ class PinnedManager {
     private func createFile() {
         if !fileManager.fileExists(atPath: fileURL.path) {
             fileManager.createFile(atPath: fileURL.path, contents: nil, attributes: nil)
-            //            print("CREATING FILE at \(fileURL.path)")
-        } else {
-            //            print("FILE ALREADY CREATED AT \(fileURL.path)")
         }
     }
     
@@ -104,31 +97,17 @@ class PinnedManager {
                     let color = CustomColor.createCustomColor(components[3].trimmingCharacters(in: .whitespaces))
                     let path = URL(string: components[4].trimmingCharacters(in: .whitespaces))
                     
-//                    print("path: \(path!.path())")
-//                    print("default: \(fileManager.currentDirectoryPath)")
-//                    print("exists: \(fileManager.fileExists(atPath: path!.path(percentEncoded: false)))")
-                    
-                    
                     if fileManager.fileExists(atPath: path!.path(percentEncoded: false)) {
                         return Pin(position: position!, name: name, file: file!, color: color!, path: path!)
                     } else {
                         return nil
                     }
+                    
                 } else {
                     return nil
                 }
-                
-//                guard components.count == 5,
-//                      let name = components[1].trimmingCharacters(in: .whitespaces) != "" ? components[1].trimmingCharacters(in: .whitespaces) : nil,
-//                      let position = Int(components[0].trimmingCharacters(in: .whitespaces)),
-//                      let file = Bool(components[2].trimmingCharacters(in: .whitespaces)),
-//                      let color = CustomColor.createCustomColor(components[3].trimmingCharacters(in: .whitespaces)),
-//                      let path = URL(string: components[4].trimmingCharacters(in: .whitespaces))
-//                else {
-//                    return nil
-//                }
-//                return Pin(position: position, name: name, file: file, color: color, path: path)
             }
+            
             pinnedFolders.sort { $0.position < $1.position }
             
             return pinnedFolders
@@ -144,9 +123,7 @@ class PinnedManager {
             let content = lines.joined(separator: "\n")
             
             try content.write(to: fileURL, atomically: true, encoding: .utf8)
-        } catch {
-            print("Error saving pinned data: \(error)")
-        }
+        } catch { }
     }
     
     func addPin(file: Bool, path: String) {
@@ -154,7 +131,6 @@ class PinnedManager {
         do {
             let pinnedData: String
             if let fileContent = try? String(contentsOf: fileURL, encoding: .utf8), !fileContent.isEmpty {
-                
                 pinnedData = fileContent.last == "\n" ?
                             "\(getPinned().count + 1),\(url.lastPathComponent),\(file),\(CustomColor.gray.name),\(path)\n"
                             : "\n\(getPinned().count + 1),\(url.lastPathComponent),\(file),\(CustomColor.gray.name),\(path)\n"
@@ -162,16 +138,13 @@ class PinnedManager {
                 pinnedData = "\(getPinned().count + 1),\(url.lastPathComponent),\(file),\(CustomColor.gray.name),\(path)\n"
             }
             
-//            let pinnedData = "\(getPinned().count + 1),\(file),\(path)\n"       // make count a locally stored var to not recall getPinned EVERY time
-            
-            let fileHandle = try FileHandle(forWritingTo: fileURL)
-            fileHandle.seekToEndOfFile()
             let data = pinnedData.data(using: .utf8)
+            let fileHandle = try FileHandle(forWritingTo: fileURL)
+            
+            fileHandle.seekToEndOfFile()
             fileHandle.write(data!)
             fileHandle.closeFile()
-        } catch {
-            print("Error saving pinned data: \(error)")
-        }
+        } catch { }
     }
     
     func deletePin(_ pin: Pin) {

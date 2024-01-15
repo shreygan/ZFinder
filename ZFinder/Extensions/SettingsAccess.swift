@@ -15,4 +15,3 @@ class ExternalWindowController<RootView : View>: NSWindowController {
         self.init(window: window)
     }
 }
-

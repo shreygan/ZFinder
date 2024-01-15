@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import AppKit
+import Quartz
 
 struct MainView: View {
     @State private var selectedPin: Pin?

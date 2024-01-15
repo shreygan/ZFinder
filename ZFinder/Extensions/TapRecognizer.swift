@@ -42,4 +42,3 @@ extension View {
         return self.modifier(TapRecognizerViewModifier(tapSensitivity: tapSensitivity, singleTapAction: singleTapAction, doubleTapAction: doubleTapAction))
     }
 }
-

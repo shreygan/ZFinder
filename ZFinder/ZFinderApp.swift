@@ -6,9 +6,6 @@
 //
 
 import SwiftUI
-import KeyboardShortcuts
-import SettingsAccess
-import Combine
 
 @main
 struct ZFinderApp: App {
@@ -74,10 +71,3 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         NSApp.setActivationPolicy(.accessory)
     }
 }
-
-
-struct AppState {
-    let openSettingsSignal = PassthroughSubject<Void, Never>()
-}
-
-

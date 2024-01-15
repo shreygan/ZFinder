@@ -6,39 +6,39 @@
 //
 
 import SwiftUI
-import QuickLook
-import KeyboardShortcuts
+import Quartz
 
 struct DetailView: View {
     @AppStorage("hideFileExtensions") private var hideFileExtensions = false
-    
-    @State private var hoveredComp: Int?
-    @State private var hoveredColor: CustomColor?
-    @State private var hoveringBack = false
-    @State private var hoveringType = false
-    @State private var hoveringPreview = false
-    @State private var hoveringTrash = false
-    @State private var showEditButton = false
-    @State private var hoveringEditButton = false
-    @State private var editing = false
-    @State private var editedText = ""
-//    @State private var customShortcut: KeyboardShortcuts.Shortcut?
-    @State private var shortcutWindowOpen = false
-    @State private var shortcutWindowInput = ""
-    
-    @State private var pinned: [Pin]
-    @State var url: URL?
-    
+
     @Binding var pin: Pin?
     
-    @FocusState private var editingFocused: Bool
+    @FocusState private var isEditFocused: Bool
     
-    @Environment(\.openWindow) var openWindow
+    @State private var pinned: [Pin]
     
+    @State private var hoveredPathComponent: Int?
+    @State private var hoveredColor: CustomColor?
+    
+    @State private var isHoveringEditButton = false
+    @State private var isHoveringPreview = false
+    @State private var isHoveringTrash = false
+    @State private var isHoveringBack = false
+    @State private var isHoveringType = false
+    
+    @State private var isShortcutWindowOpen = false
+    @State private var isQuickLooking = false
+    @State private var isShowingEdit = false
+    @State private var isEditing = false
+    
+    @State private var editedText = ""
+    
+    let pinnedManager = PinnedManager()
+        
     var resetSelectedPin: () -> Void
     var openFinder: (String) -> Void
     
-    let pinnedManager = PinnedManager()
+    var QLPanel: QLPreviewPanel?
     
     init(pin: Binding<Pin?>, resetSelectedPin: @escaping () -> Void, openFinder: @escaping (String) -> Void) {
         _pin = pin
@@ -46,6 +46,7 @@ struct DetailView: View {
         self.openFinder = openFinder
         _pinned = State(initialValue: pinnedManager.getPinned())
         _editedText = State(initialValue: _pin.wrappedValue?.name ?? "")
+        QLPanel = QLPreviewPanel.shared()
     }
     
     var body: some View {
@@ -54,14 +55,14 @@ struct DetailView: View {
                 resetSelectedPin()
             }) {
                 Image(systemName: "chevron.backward")
-                    .font(hoveringBack ? .title2 : .title3)
+                    .font(isHoveringBack ? .title2 : .title3)
                     .frame(width: 12.5, height: 12.5)
             }
             .buttonStyle(.borderless)
             .padding(.leading, 5)
             .onHover { hovering in
                 withAnimation(.easeInOut(duration: 0.1)) {
-                    hoveringBack = hovering
+                    isHoveringBack = hovering
                 }
             }
             .onDisappear {
@@ -76,20 +77,28 @@ struct DetailView: View {
                         .foregroundColor(pin.isFile ? .gray : .blue)
                         .padding(.leading, 5)
                         .padding(.trailing, -2)
-                        .font(hoveringType ? .title2 : .title3)
+                        .font(isHoveringType ? .title2 : .title3)
                         .onHover { hovering in
                             withAnimation(.easeInOut(duration: 0.1)) {
-                                hoveringType = hovering
+                                isHoveringType = hovering
                             }
                         }
                         .onTapGesture(count: 2) {
-                            url = (url == nil ? URL(fileURLWithPath: pin.path.path(percentEncoded: false)) : nil)
+                            isQuickLooking.toggle()
+                            if isQuickLooking {
+                                QLPanel?.center()
+                                QLPanel?.dataSource = pin.quickLook
+                                QLPanel?.makeKeyAndOrderFront(nil)
+                            } else {
+                                QLPanel?.close()
+                            }
                         }
                         .onTapGesture {
-                            if url == nil {
-                                openFinder(pin.path.path(percentEncoded: false))
+                            if isQuickLooking {
+                                isQuickLooking = false
+                                QLPanel?.close()
                             } else {
-                                url = nil
+                                openFinder(pin.path.path(percentEncoded: false))
                             }
                         }
                 } else {
@@ -99,61 +108,85 @@ struct DetailView: View {
                         .foregroundColor(pin.isFile ? .gray : .blue)
                         .padding(.leading, 5)
                         .padding(.trailing, -2)
-                        .font(hoveringType ? .title2 : .title3)
+                        .font(isHoveringType ? .title2 : .title3)
                         .onHover { hovering in
                             withAnimation(.easeInOut(duration: 0.1)) {
-                                hoveringType = hovering
+                                isHoveringType = hovering
                             }
                         }
                         .onTapGesture(count: 2) {
-                            url = (url == nil ? URL(fileURLWithPath: pin.path.path(percentEncoded: false)) : nil)
+                            isQuickLooking.toggle()
+                            if isQuickLooking {
+                                QLPanel?.center()
+                                QLPanel?.dataSource = pin.quickLook
+                                QLPanel?.makeKeyAndOrderFront(nil)
+                            } else {
+                                QLPanel?.close()
+                            }
                         }
                         .onTapGesture {
-                            if url == nil {
-                                openFinder(pin.path.path(percentEncoded: false))
+                            if isQuickLooking {
+                                isQuickLooking = false
+                                QLPanel?.close()
                             } else {
-                                url = nil
+                                openFinder(pin.path.path(percentEncoded: false))
                             }
                         }
                 }
             }
             
             HStack {
-                if showEditButton {
+                if isShowingEdit {
                     Button(action: {
-                        editing.toggle()
+                        isEditing.toggle()
                         editedText = pin?.name ?? ""
-                        editingFocused.toggle()
+                        isEditFocused.toggle()
                     }) {
                         Image(systemName: "pencil")
-                            .font(hoveringEditButton ? .title2 : .title3)
+                            .font(isHoveringEditButton ? .title2 : .title3)
                             .frame(width: 12.5, height: 12.5)
                     }
                     .buttonStyle(.borderless)
                     .padding(.leading, 1)
                     .onHover { hovering in
                         withAnimation(.easeInOut(duration: 0.1)) {
-                            hoveringEditButton = hovering
+                            isHoveringEditButton = hovering
                         }
                     }
                 }
                 
                 ScrollView(.horizontal, showsIndicators: false) {
-                    if editing {
-                        TextField("\(editedText)", text: $editedText) {
-                            setPinName(editedText)
-                            editing = false
+                    if isEditing {
+                        if #available(macOS 13.0, *) {
+                            TextField("\(editedText)", text: $editedText) {
+                                setPinName(editedText)
+                                isEditing = false
+                            }
+                            .focused($isEditFocused)
+                            .font(.title3)
+                            .fontWeight(.heavy)
+                            .padding(2)
+                            .padding(.horizontal, 2)
+                            .textFieldStyle(PlainTextFieldStyle())
+                            .background (
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(pin?.color.color.opacity(0.2) ?? Color.gray)
+                            )
+                        } else {
+                            TextField("\(editedText)", text: $editedText) {
+                                setPinName(editedText)
+                                isEditing = false
+                            }
+                            .focused($isEditFocused)
+                            .font(.title3)
+                            .padding(2)
+                            .padding(.horizontal, 2)
+                            .textFieldStyle(PlainTextFieldStyle())
+                            .background (
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(pin?.color.color.opacity(0.2) ?? Color.gray)
+                            )
                         }
-                        .focused($editingFocused)
-                        .font(.title3)
-                        .fontWeight(.heavy)
-                        .padding(2)
-                        .padding(.horizontal, 2)
-                        .textFieldStyle(PlainTextFieldStyle())
-                        .background (
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(pin?.color.color.opacity(0.2) ?? Color.gray)
-                        )
                         
                     } else {
                         Text(hideFileExtensions ? (pin?.nameNoExt ?? "") : (pin?.name ?? ""))
@@ -170,13 +203,13 @@ struct DetailView: View {
                 .padding(.trailing, 5)
             }
             .onHover { hovering in
-                if hovering || editing {
+                if hovering || isEditing {
                     withAnimation(.easeInOut(duration: 0.3).delay(1)) {
-                        showEditButton = true
+                        isShowingEdit = true
                     }
                 } else {
                     withAnimation(.easeInOut(duration: 0.3)) {
-                        showEditButton = false
+                        isShowingEdit = false
                     }
                 }
             }
@@ -184,18 +217,24 @@ struct DetailView: View {
             Spacer()
             
             Button(action: {
-                url = (url == nil ? URL(fileURLWithPath: pin?.path.path(percentEncoded: false) ?? "") : nil)
+                isQuickLooking.toggle()
+                if isQuickLooking {
+                    QLPanel?.center()
+                    QLPanel?.dataSource = pin?.quickLook
+                    QLPanel?.makeKeyAndOrderFront(nil)
+                } else {
+                    QLPanel?.close()
+                }
             }) {
                 Image(systemName: "eye")
-                    .font(hoveringPreview ? .title2 : .title3)
+                    .font(isHoveringPreview ? .title2 : .title3)
                     .frame(width: 12.5, height: 12.5)
             }
-            .quickLookPreview($url)
             .buttonStyle(.borderless)
             .padding(.trailing, 15)
             .onHover { hovering in
                 withAnimation(.easeInOut(duration: 0.1)) {
-                    hoveringPreview = hovering
+                    isHoveringPreview = hovering
                 }
             }
         }
@@ -230,14 +269,14 @@ struct DetailView: View {
                         }
                         
                         Text(comp)
-                            .foregroundStyle(hoveredComp == i ? Color.blue : Color.primary)
+                            .foregroundStyle(hoveredPathComponent == i ? Color.blue : Color.primary)
                             .font(.headline)
                             .onTapGesture {
                                 openFinder(path)
                             }
                             .onHover { hovering in
                                 withAnimation(.easeInOut(duration: 0.1)) {
-                                    hoveredComp = hovering ? i : nil
+                                    hoveredPathComponent = hovering ? i : nil
                                 }
                             }
                             .if(i > 0) { view in
@@ -292,32 +331,17 @@ struct DetailView: View {
         Divider()
             .padding(.horizontal, 10)
         
-//        Form {
-//            KeyboardShortcuts.Recorder("test:", name: .test)
-//        }
-//        .onAppear {
-//            customShortcut = KeyboardShortcuts.getShortcut(for: .test)
-//        }
-        
         HStack {
             Spacer()
             
             Button(action: {
-//                shortcutWindowOpen.toggle()
-//                openWindow(id: "shortcutInput")
-//                openWindow(value: pin?.id)
-//                let varToPass = "TESTIGN"
                 NSApp.sendAction(#selector(AppDelegate.openShortcutWindow), to: nil, from: NSNumber(value: pin?.position ?? -1))
             }) {
                 Text("Setup Global Shortcut")
             }
-//            .sheet(isPresented: $shortcutWindowOpen) {
-//                ShortcutView(input: $shortcutWindowInput)
-//            }
             
             Spacer()
         }
-        
         
         Divider()
             .padding(.horizontal, 10)
@@ -332,14 +356,14 @@ struct DetailView: View {
             }) {
                 Image(systemName: "trash")
                     .foregroundStyle(Color.red)
-                    .font(hoveringTrash ? .title2 : .title3)
+                    .font(isHoveringTrash ? .title2 : .title3)
                     .frame(width: 12.5, height: 12.5)
             }
             .buttonStyle(.borderless)
             .padding(.bottom, 2)
             .onHover { hovering in
                 withAnimation(.easeInOut(duration: 0.1)) {
-                    hoveringTrash = hovering
+                    isHoveringTrash = hovering
                 }
             }
         }
@@ -353,17 +377,13 @@ struct DetailView: View {
             pinned[index].color = color
             pin = pinned[index]
             pinnedManager.savePinned(pinned)
-        } else {
-            print("FAILED")
         }
     }
     
     private func setPinName(_ name: String) {
-        print("BEFORE: \(pin!)")
         if let index = pinned.firstIndex(where: { $0.position == pin?.position }) {
             pinned[index].name = name
             pin = pinned[index]
-            print("AFTER: \(pin!)")
             pinnedManager.savePinned(pinned)
         }
     }

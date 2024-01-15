@@ -8,7 +8,6 @@
 import Carbon
 import Cocoa
 
-
 extension String {
   /// This converts string to UInt as a fourCharCode
   public var fourCharCodeValue: Int {

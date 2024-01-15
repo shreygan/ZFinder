@@ -7,64 +7,56 @@
 
 import SwiftUI
 import HotKey
+import Quartz
 
 struct PinView: View {
     @AppStorage("hideFileExtensions") private var hideFileExtensions = false
     
-    @State private var pinned: [Pin]
-    @State private var search = ""
-    @State private var searchPath = false
-    @State private var hoveredPin: Pin?
-    @State private var reorderMode = false
-    @State private var deleteMode = false
-    @State private var count = 0
-    @State private var hoveringOrder = false
-    @State private var hoveringTrash = false
-    @State private var hoveringAdd = false
-    @State private var hoveringType = false
-    @State private var deleting = false
-    @State private var deletingPin: Pin?
-    @State private var url: URL?
-    
-    @State private var icons: [Pin: NSImage?] = [:]
-    
     @Binding private var selectedPin: Pin?
     
-    var openFinder: (String) -> Void
+    @State private var pinned: [Pin]
+    @State private var icons: [Pin: NSImage?] = [:]
+    @State private var animationTick = 0
     
-    var pinnedSearch: [Pin] {
-        if search.isEmpty {
-            return pinned
-        } else if searchPath {
-            return pinned.filter { $0.path.path().localizedCaseInsensitiveContains(search) }
-        } else {
-            return pinned.filter { $0.name.localizedCaseInsensitiveContains(search) }
-        }
-    }
+    @State private var isSearchingPath = false
+    @State private var searchText = ""
+    
+    @State private var hoveredPin: Pin?
+    
+    @State private var isDeleteMode = false
+    @State private var isDeleting = false
+    @State private var deletedPin: Pin?
+    
+    @State private var isReorderMode = false
+    
+    @State private var isHoveringOrder = false
+    @State private var isHoveringTrash = false
+    @State private var isHoveringType = false
+    @State private var isQuickLooking = false
+    @State private var isHoveringAdd = false
     
     let pinnedManager = PinnedManager()
-    let hotkey = HotKey(key: .a, modifiers: [.command, .control])
+        
+    var openFinder: (String) -> Void
+
+    var QLPanel: QLPreviewPanel?
+        
+    var pinnedSearch: [Pin] {
+        if searchText.isEmpty {
+            return pinned
+        } else if isSearchingPath {
+            return pinned.filter { $0.path.path().localizedCaseInsensitiveContains(searchText) }
+        } else {
+            return pinned.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+        }
+    }
     
     init(selectedPin: Binding<Pin?>, openFinder: @escaping (String) -> Void) {
         _pinned = State(initialValue: pinnedManager.getPinned())
         _selectedPin = selectedPin
         self.openFinder = openFinder
-        
-//        let fileManager = FileManager()
-//        print(fileManager.currentDirectoryPath)
-        
-//        callFunc()
+        QLPanel = QLPreviewPanel.shared()
     }
-    
-//    private func callFunc() {
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "h:mm:ss.SSS a"
-//        
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-//            print("CALLING AT \(dateFormatter.string(from: Date()))")
-//            callFunc()
-//        }
-//    }
     
     var body: some View {
         VStack {
@@ -80,15 +72,15 @@ struct PinView: View {
                     deletePins()
                 }) {
                     Image(systemName: "trash")
-                        .font(hoveringTrash ? .title2 : .title3)
-                        .foregroundStyle(deleteMode ? .red : .blue)
+                        .font(isHoveringTrash ? .title2 : .title3)
+                        .foregroundStyle(isDeleteMode ? .red : .blue)
                         .frame(width: 12.5, height: 12.5)
                 }
                 .buttonStyle(.borderless)
                 .padding(.trailing, 5)
                 .onHover { hovering in
                     withAnimation(.easeInOut(duration: 0.1)) {
-                        hoveringTrash = hovering
+                        isHoveringTrash = hovering
                     }
                 }
                 
@@ -96,45 +88,23 @@ struct PinView: View {
                     reorderPins()
                 }) {
                     Image(systemName: "arrow.up.arrow.down")
-                        .font(hoveringOrder ? .title2 : .title3)
-                        .foregroundStyle(reorderMode ? .red : .blue)
+                        .font(isHoveringOrder ? .title2 : .title3)
+                        .foregroundStyle(isReorderMode ? .red : .blue)
                         .frame(width: 12.5, height: 12.5)
                 }
                 .buttonStyle(.borderless)
                 .padding(.trailing, 5)
                 .onHover { hovering in
                     withAnimation(.easeInOut(duration: 0.1)) {
-                        hoveringOrder = hovering
+                        isHoveringOrder = hovering
                     }
                 }
-//                .popover(isPresented: $reordering) {
-//                    Text("POPOVER!")
-//                        .padding(5)
-//                    
-//                    Spacer()
-//                    
-//                    Button("Option 1") {
-//                        print("Selected Option 1")
-//                    }
-//                    .popover(isPresented: $reordering) {
-//                        Text("DOUBLE POPOVER!")
-//                    }
-//                    .padding(5)
-//                    Button("Option 2") {
-//                        print("Selected Option 2")
-//                    }
-//                    .padding(5)
-//                    Button("Option 3") {
-//                        print("Selected Option 3")
-//                    }
-//                    .padding(5)
-//                }
                 
                 Button(action: {
                     addPin()
                 }) {
                     Image(systemName: "plus.circle")
-                        .font(hoveringAdd ? .title2 : .title3)
+                        .font(isHoveringAdd ? .title2 : .title3)
                         .foregroundStyle(.blue)
                         .frame(width: 12.5, height: 12.5)
                 }
@@ -142,7 +112,7 @@ struct PinView: View {
                 .padding(.trailing, 20)
                 .onHover { hovering in
                     withAnimation(.easeInOut(duration: 0.1)) {
-                        hoveringAdd = hovering
+                        isHoveringAdd = hovering
                     }
                 }
             }
@@ -153,21 +123,21 @@ struct PinView: View {
                 .padding(.horizontal, 10)
             
             HStack {
-                TextField("Search by \(searchPath ? "Path" : "Name")", text: $search)
+                TextField("Search by \(isSearchingPath ? "Path" : "Name")", text: $searchText)
                     .padding(.horizontal, 20)
                     .textFieldStyle(PlainTextFieldStyle())
                     .font(.system(size: 10))
                     .padding(.vertical, -5)
                     .foregroundStyle(Color.gray)
-                    .disabled(deleting)
+                    .disabled(isDeleting)
                 
-                Toggle(isOn: $searchPath) {
-                    Text(searchPath ? "Path" : "Name")
+                Toggle(isOn: $isSearchingPath) {
+                    Text(isSearchingPath ? "Path" : "Name")
                         .font(.system(size: 10))
                         .padding(.horizontal, -2)
                         .frame(width: 25)
                 }
-                .disabled(deleting)
+                .disabled(isDeleting)
                 .toggleStyle(ButtonToggleStyle())
                 .padding(.leading, -17.5)
                 .padding(.trailing, 12.5)
@@ -181,7 +151,7 @@ struct PinView: View {
                 ForEach(pinnedSearch) { pin in
                     pinnedEntryView(pin)
                 }
-                .if(reorderMode) { view in
+                .if(isReorderMode) { view in
                     view.onMove(perform: orderPinned)
                 }
                 .padding(.horizontal, 5)
@@ -190,11 +160,12 @@ struct PinView: View {
             .listStyle(PlainListStyle())
             .padding(.bottom, -7)
             .padding(.top, -2)
+            
         }
         .onAppear {
             pinned = pinnedManager.getPinned()
-            deleting = false
-            deletingPin = nil
+            isDeleting = false
+            deletedPin = nil
             hoveredPin = nil
         }
     }
@@ -207,54 +178,54 @@ struct PinView: View {
                 pinnedEntryOtherIcon(pin)
             }
             
-            if deleting && deletingPin == pin {
+            if isDeleting && deletedPin == pin {
                 pinnedEntryDeletingView()
             } else {
                 pinnedEntryNotDeletingView(pin)
             }
         }
-        .if(reorderMode) { view in
-            view.modifier(Shake(animatableData: CGFloat(count)))
+        .if(isReorderMode) { view in
+            view.modifier(Shake(animatableData: CGFloat(animationTick)))
         }
         .padding(.vertical, 4)
         .padding(.horizontal, -10)
-        .if(!reorderMode && !deleteMode) { view in
+        .if(!isReorderMode && !isDeleteMode) { view in
             view.background (
                 RoundedRectangle(cornerRadius: 8)
                     .fill(pin == hoveredPin ? pin.color.color.opacity(0.4) : pin.color.color.opacity(0.2))
                     .padding(.horizontal, -5)
             )
         }
-        .if(!reorderMode && !deleteMode) { view in
+        .if(!isReorderMode && !isDeleteMode) { view in
             view.onTapGesture {
                 selectedPin = pin
             }
         }
-        .if(!reorderMode && !deleteMode) { view in
+        .if(!isReorderMode && !isDeleteMode) { view in
             view.onHover { hovering in
                 withAnimation(.easeInOut(duration: 0.1)) {
                     hoveredPin = hovering ? pin : nil
                 }
             }
         }
-        .if(deleteMode) { view in
+        .if(isDeleteMode) { view in
             view.onHover { hovering in
                 withAnimation(.easeInOut(duration: 0.1)) {
-                    hoveredPin = deleting ? hoveredPin : (hovering ? pin : nil)
+                    hoveredPin = isDeleting ? hoveredPin : (hovering ? pin : nil)
                 }
             }
         }
-        .if(deleteMode) { view in
+        .if(isDeleteMode) { view in
             view.onTapGesture {
                 withAnimation(.easeInOut(duration: 0.1)) {
-                    if deletingPin == nil {
-                        deletingPin = pin
-                        deleting = true
+                    if deletedPin == nil {
+                        deletedPin = pin
+                        isDeleting = true
                     }
                 }
             }
         }
-        .if(deleteMode) { view in
+        .if(isDeleteMode) { view in
             view.background (
                 RoundedRectangle(cornerRadius: 8)
                     .fill(pin == hoveredPin ? Color.red.opacity(0.4) : Color.red.opacity(0.2))
@@ -271,15 +242,15 @@ struct PinView: View {
             Spacer()
             
             Button("Cancel") {
-                deleting = false
-                deletingPin = nil
+                isDeleting = false
+                deletedPin = nil
             }
             .buttonStyle(BorderedButtonStyle())
             
             Button(action: {
-                deletePin(deletingPin!)
-                deleting = false
-                deletingPin = nil
+                deletePin(deletedPin!)
+                isDeleting = false
+                deletedPin = nil
             }) {
                 Text("Confirm")
                     .foregroundStyle(Color.red)
@@ -298,7 +269,7 @@ struct PinView: View {
             
             Spacer()
             
-            if hoveredPin == pin && !reorderMode && !deleteMode {
+            if hoveredPin == pin && !isReorderMode && !isDeleteMode {
                 Button(action: {
                     selectedPin = pin
                 }) {
@@ -316,18 +287,25 @@ struct PinView: View {
             .aspectRatio(contentMode: .fit)
             .frame(width: 20, height: 20)
             .padding(.leading, 10)
-            .quickLookPreview($url)
-            .if(!reorderMode) { view in
+            .if(!isReorderMode) { view in
                 view.onTapGesture(count: 2) {
-                    url = (url == nil ? URL(fileURLWithPath: pin.path.path(percentEncoded: false)) : nil)
+                    isQuickLooking.toggle()
+                    if isQuickLooking {
+                        QLPanel?.center()
+                        QLPanel?.dataSource = pin.quickLook
+                        QLPanel?.makeKeyAndOrderFront(nil)
+                    } else {
+                        QLPanel?.close()
+                    }
                 }
             }
-            .if(!reorderMode) { view in
+            .if(!isReorderMode) { view in
                 view.onTapGesture {
-                    if url == nil {
-                        openFinder(pin.path.path(percentEncoded: false))
+                    if isQuickLooking {
+                        isQuickLooking = false
+                        QLPanel?.close()
                     } else {
-                        url = nil
+                        openFinder(pin.path.path(percentEncoded: false))
                     }
                 }
             }
@@ -339,24 +317,31 @@ struct PinView: View {
             .frame(width: 20, height: 20)
             .foregroundColor(pin.isFile ? .gray : .blue)
             .padding(.leading, 10)
-            .font(hoveringType && hoveredPin == pin ? .title2 : .title3)
-            .quickLookPreview($url)
+            .font(isHoveringType && hoveredPin == pin ? .title2 : .title3)
             .onHover { hovering in
                 withAnimation(.easeInOut(duration: 0.1)) {
-                    hoveringType = hovering
+                    isHoveringType = hovering
                 }
             }
-            .if(!reorderMode) { view in
+            .if(!isReorderMode) { view in
                 view.onTapGesture(count: 2) {
-                    url = (url == nil ? URL(fileURLWithPath: pin.path.path(percentEncoded: false)) : nil)
+                    isQuickLooking.toggle()
+                    if isQuickLooking {
+                        QLPanel?.center()
+                        QLPanel?.dataSource = pin.quickLook
+                        QLPanel?.makeKeyAndOrderFront(nil)
+                    } else {
+                        QLPanel?.close()
+                    }
                 }
             }
-            .if(!reorderMode) { view in
+            .if(!isReorderMode) { view in
                 view.onTapGesture {
-                    if url == nil {
-                        openFinder(pin.path.path(percentEncoded: false))
+                    if isQuickLooking {
+                        isQuickLooking = false
+                        QLPanel?.close()
                     } else {
-                        url = nil
+                        openFinder(pin.path.path(percentEncoded: false))
                     }
                 }
             }
@@ -368,10 +353,10 @@ struct PinView: View {
     }
     
     private func addPin() {
-        reorderMode = false
-        deleteMode = false
-        deleting = false
-        deletingPin = nil
+        isReorderMode = false
+        isDeleteMode = false
+        isDeleting = false
+        deletedPin = nil
         
         let dirPicker = NSOpenPanel()
         dirPicker.canChooseFiles = true
@@ -403,24 +388,24 @@ struct PinView: View {
     }
     
     private func reorderPins() {
-        reorderMode.toggle()
-        deleteMode = false
-        deleting = false
-        deletingPin = nil
+        isReorderMode.toggle()
+        isDeleteMode = false
+        isDeleting = false
+        deletedPin = nil
         withAnimation(.default) {
-            count += 1
+            animationTick += 1
         }
     }
     
     private func deletePins() {
-        if deleteMode {
-            deleting = false
-            deletingPin = nil
+        if isDeleteMode {
+            isDeleting = false
+            deletedPin = nil
         }
-        deleteMode.toggle()
-        reorderMode = false
+        isDeleteMode.toggle()
+        isReorderMode = false
         withAnimation(.default) {
-            count += 1
+            animationTick += 1
         }
     }
 }
