@@ -9,7 +9,7 @@ A MacOS menu bar app to access your files/folders/applications quickly.
 
 <div style="overflow-x:scroll; white-space:nowrap; text-align:center;">
     <div style="display:inline-block; margin-right:10px; margin-left:10px; margin-top:10px;">
-        <img src="Media/Screenshots/Main.gif">
+        <img src="Media/Screenshots/main.gif">
         <p style="margin-bottom:-10px;"></p>
     </div>
 </div>
