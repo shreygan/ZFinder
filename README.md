@@ -8,7 +8,7 @@
 A MacOS menu bar app to access your files/folders/applications quickly.
 
 <p align="center">
-    <img src="Media/Screenshots/main.gif" height=300 width=239/>
+    <img src="Media/Screenshots/main.gif"/>
 </p>
 
 ## Features
