@@ -67,3 +67,18 @@ func extToSFSymbol(ext: String) -> String {
         return "doc"
     }
 }
+
+/// perform closure on change of binding
+extension Binding {
+    /// When the `Binding`'s `wrappedValue` changes, the given closure is executed.
+    /// - Parameter closure: Chunk of code to execute whenever the value changes.
+    /// - Returns: New `Binding`.
+    func onUpdate(_ closure: @escaping () -> Void) -> Binding<Value> {
+        Binding(get: {
+            wrappedValue
+        }, set: { newValue in
+            wrappedValue = newValue
+            closure()
+        })
+    }
+}

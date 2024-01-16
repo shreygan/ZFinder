@@ -15,7 +15,6 @@ struct PinView: View {
     @Binding private var selectedPin: Pin?
     
     @State private var pinned: [Pin]
-    @State private var icons: [Pin: NSImage?] = [:]
     @State private var animationTick = 0
     
     @State private var isSearchingPath = false
@@ -40,16 +39,6 @@ struct PinView: View {
     var openFinder: (String) -> Void
 
     var QLPanel: QLPreviewPanel?
-        
-    var pinnedSearch: [Pin] {
-        if searchText.isEmpty {
-            return pinned
-        } else if isSearchingPath {
-            return pinned.filter { $0.path.path().localizedCaseInsensitiveContains(searchText) }
-        } else {
-            return pinned.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
-        }
-    }
     
     init(selectedPin: Binding<Pin?>, openFinder: @escaping (String) -> Void) {
         _pinned = State(initialValue: pinnedManager.getPinned())
@@ -123,7 +112,7 @@ struct PinView: View {
                 .padding(.horizontal, 10)
             
             HStack {
-                TextField("Search by \(isSearchingPath ? "Path" : "Name")", text: $searchText)
+                TextField("Search by \(isSearchingPath ? "Path" : "Name")", text: $searchText.onUpdate(updatePinned))
                     .padding(.horizontal, 20)
                     .textFieldStyle(PlainTextFieldStyle())
                     .font(.system(size: 10))
@@ -131,7 +120,7 @@ struct PinView: View {
                     .foregroundStyle(Color.gray)
                     .disabled(isDeleting)
                 
-                Toggle(isOn: $isSearchingPath) {
+                Toggle(isOn: $isSearchingPath.onUpdate(updatePinned)) {
                     Text(isSearchingPath ? "Path" : "Name")
                         .font(.system(size: 10))
                         .padding(.horizontal, -2)
@@ -141,14 +130,13 @@ struct PinView: View {
                 .toggleStyle(ButtonToggleStyle())
                 .padding(.leading, -17.5)
                 .padding(.trailing, 12.5)
-
             }
             
             Divider()
                 .padding(.horizontal, 10)
                     
             List {
-                ForEach(pinnedSearch) { pin in
+                ForEach(pinned) { pin in
                     pinnedEntryView(pin)
                 }
                 .if(isReorderMode) { view in
@@ -163,7 +151,9 @@ struct PinView: View {
             
         }
         .onAppear {
-            pinned = pinnedManager.getPinned()
+            updatePinned()
+            isDeleteMode = false
+            isReorderMode = false
             isDeleting = false
             deletedPin = nil
             hoveredPin = nil
@@ -345,6 +335,16 @@ struct PinView: View {
                     }
                 }
             }
+    }
+    
+    private func updatePinned() {
+        if searchText.isEmpty {
+            pinned = pinnedManager.getPinned()
+        } else if isSearchingPath {
+            pinned = pinnedManager.getPinned().filter { $0.path.path().localizedCaseInsensitiveContains(searchText) }
+        } else {
+            pinned = pinnedManager.getPinned().filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+        }
     }
     
     private func deletePin(_ folder: Pin) {
