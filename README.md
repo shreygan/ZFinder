@@ -8,12 +8,18 @@
 A MacOS menu bar app to access your files/folders/applications quickly.
 
 <p align="center">
-    <img src="Media/Screenshots/main.gif"/>
+    <img src="Media/Screenshots/main.gif" width=50% height=50%/>
 </p>
 
 ## Features
 
-<details><summary> Open Files/Folders/Applications </summary>
+<details><summary> Pin Files/Folders/Applications </summary>
+<div style="display:inline-block; margin-right:10px; margin-left:10px; margin-top:10px;">
+    <img src="Media/Screenshots/pin.gif">
+</div>
+</details>
+
+<details><summary> Open pins </summary>
 <div style="display:inline-block; margin-right:10px; margin-left:10px; margin-top:10px;">
     <img src="Media/Screenshots/open50.gif">
 </div>
